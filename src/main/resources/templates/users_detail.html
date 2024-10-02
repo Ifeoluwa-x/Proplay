@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Details</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 30px;
+        }
+        .user-info {
+            margin-bottom: 15px;
+        }
+        .label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="body">
+
+
+    <div class="container">
+        <h1 class="my-4">User Details</h1>
+        <div class="card">
+            <div class="card-body">
+                <div class="user-info">
+                    <span class="label">First Name:</span>
+                    <span th:text="${user.fname}"></span>
+                </div>
+
+                <div class="user-info">
+                    <span class="label">Last Name:</span>
+                    <span th:text="${user.lname}"></span>
+                </div>
+
+                <div class="user-info">
+                    <span class="label">Email:</span>
+                    <span th:text="${user.email}"></span>
+                </div>
+
+                <div class="user-info">
+                    <span class="label">Age:</span>
+                    <span th:text="${user.age}"></span>
+                </div>
+
+                <div class="user-info">
+                    <span class="label">Position:</span>
+                    <span th:text="${user.position}"></span>
+                </div>
+
+                <div class="user-info">
+                    <span class="label">Skill Level:</span>
+                    <span th:text="${user.skillLevel}"></span>
+                </div>
+
+                <div class="user-info">
+                    <span class="label">Availability:</span>
+                    <span th:text="${user.availability}"></span>
+                </div>
+
+                <div class="user-info">
+                    <span class="label">Location:</span>
+                    <span th:text="${user.location}"></span>
+                </div>
+
+                <div class="user-info">
+                    <span class="label">Sex:</span>
+                    <span th:text="${user.sex}"></span>
+                </div>
+
+                <div class="user-info">
+                    <span class="label">Team:</span>
+                    <span th:text="${user.team}"></span>
+                </div>
+            </div>
+        </div>
+
+        <a href="/users/list" class="btn btn-primary mt-3">Back to User List</a>
+    </div>
+</section>
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
