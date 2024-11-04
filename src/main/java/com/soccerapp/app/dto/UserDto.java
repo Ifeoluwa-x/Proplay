@@ -21,6 +21,11 @@ public class UserDto {
     private String lname;
     @NotBlank(message = "email is required.")
     private String email;
+
+//    @NotBlank(message = "password is required.")
+//    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+//            message = "Password must be at least 8 characters long, contain at least one letter, one digit, and one special character.")
+//    private String password;
     @NotBlank(message = "password is required.")
     private String password;
     @Min(value = 18, message = "Age must be at least 18.")
