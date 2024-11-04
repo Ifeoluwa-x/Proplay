@@ -9,11 +9,14 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    Optional<User> findByEmail(String email);
+
     Optional<User> findUserById(long id);
 
     @Modifying
-    @Query("UPDATE User u SET u.position = :position, u.location = :location WHERE u.id = :id")
+    @Query("UPDATE User u SET u.email = :email, u.location = :location WHERE u.id = :id")
     void updateUserFields(@Param("id") Long id,
-                          @Param("position") String position,
+                          @Param("email") String email,
                           @Param("location") String location);
 }

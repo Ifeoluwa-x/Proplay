@@ -1,0 +1,146 @@
+<html
+        xmlns:th="http://thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+  <title>Register</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+
+    .main {
+      width: 100%;
+      max-width: 800px;  /* Set a max-width for larger screens */
+      padding: 30px 10px;
+      /*background-color: aqua;*/
+      margin: 0 auto;    /* Center horizontally */
+    }
+
+    section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;     /* Full viewport height for vertical centering */
+    }
+
+    .login-form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .alert {
+      margin-bottom: 20px;
+      border-radius: 5px;
+    }
+
+    button.btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+    .register-button-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .register-button {
+      background-color: #007bff; /* Primary blue color */
+      color: #fff;
+      font-size: 1rem;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px; /* Rounded corners */
+      text-align: center;
+      text-decoration: none; /* Remove underline */
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .register-button:hover {
+      background-color: #0056b3; /* Darker shade for hover */
+      transform: scale(1.05); /* Slightly enlarge on hover */
+    }
+
+    .register-button:focus {
+      outline: none; /* Remove outline on focus */
+    }
+
+    .register-button:active {
+      background-color: #004085; /* Darkest shade when clicked */
+      transform: scale(0.98); /* Slightly reduce size when clicked */
+    }
+
+    /* Responsive adjustments */
+    @media screen and (max-width: 450px) {
+      .login-form {
+        margin-top: 10%;
+      }
+    }
+
+    /* Remove this block to prevent shifting */
+    /*@media screen and (min-width: 768px) {
+      .main {
+        margin-left: 30%;
+      }
+    }*/
+  </style>
+
+</head>
+<body>
+<section layout:fragment="body" >
+  <div class="main">
+    <div class="col-md-6 col-sm-12 mx-auto">
+      <h2 class="text-center">Login</h2>
+      <div th:if="${param.success}" class="alert alert-success">
+        Account Created Successfully. Kindly Login Below
+      </div>
+      <div th:if="${param.error}" class="alert alert-danger">
+        Invalid username and password
+      </div>
+      <div th:if="${param.logout}" class="alert alert-success">
+        You have been logged out.
+      </div>
+      <div class="login-form">
+        <form method="post" th:action="@{/login}">
+          <div class="form-group">
+            <label for="username">Email</label>
+            <input
+                    id="username"
+                    type="text"
+                    class="form-control"
+                    placeholder="Email"
+                    name="username" required>
+<!--            <p th:if="${#fields.hasErrors('username')}" class="text-danger" th:errors="*{username}"></p>-->
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+                    id="password"
+                    type="password"
+                    class="form-control"
+                    placeholder="Password"
+                    name="password" required>
+<!--            <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></p>-->
+          </div>
+          <button type="submit" class="btn btn-secondary">Login</button>
+          <div class="text-center mt-3">
+            <span>Don't have an account?</span>
+            <div class="register-button-container">
+              <a th:href="@{/register}" class="register-button">Register here.</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

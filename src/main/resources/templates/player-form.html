@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Player</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Create Player</h1>
+
+    <!-- Display logged-in user information -->
+    <div class="alert alert-info">
+        <strong>Logged in as:</strong> <span th:text="${loggedInUser.email}">Email</span><br>
+        <strong>User Id</strong> <span th:text="${loggedInUser.id}">Id</span><br>
+        <strong>Name:</strong> <span th:text="${loggedInUser.fname} + ' ' + ${loggedInUser.lname}">Full Name</span>
+    </div>
+
+    <form th:action="@{/players/save}" method="post" th:object="${player}" class="needs-validation" novalidate>
+        <div class="form-group">
+            <label for="availability">Availability</label>
+            <input type="text" id="availability" class="form-control" th:field="*{availability}" required>
+            <div class="invalid-feedback">Please enter availability.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="position">Position</label>
+            <input type="text" id="position" class="form-control" th:field="*{position}" required>
+            <div class="invalid-feedback">Please enter position.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="skillLevel">Skill Level</label>
+            <input type="text" id="skillLevel" class="form-control" th:field="*{skillLevel}" required>
+            <div class="invalid-feedback">Please enter skill level.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="playerBio">Player Bio</label>
+            <textarea id="playerBio" class="form-control" th:field="*{playerBio}"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Player</button>
+    </form>
+</div>
+</body>
+</html>

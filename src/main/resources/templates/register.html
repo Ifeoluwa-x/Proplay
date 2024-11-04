@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Create User</h2>
+    <div th:if="${param.error}" class="alert alert-danger">
+        Invalid username and password.
+    </div>
+    <div th:if="${param.success}" class="alert alert-success">
+        You have been logged out.
+    </div>
+    <div th:if="${param.fail}" class="alert alert-success">
+        Email already exist.
+    </div>
+
+    <!-- Thymeleaf Form for User Creation -->
+    <form th:action="@{/register}" th:object="${user}" method="post">
+
+
+        <!-- First Name Field -->
+        <div class="form-group">
+            <label for="fname">First Name:</label>
+            <input type="text" id="fname" name="fname" th:field="*{fname}" class="form-control">
+            <p th:if="${#fields.hasErrors('fname')}" class="text-danger" th:errors="*{fname}"></p>
+        </div>
+
+        <!-- Last Name Field -->
+        <div class="form-group">
+            <label for="lname">Last Name:</label>
+            <input type="text" id="lname" name="lname" th:field="*{lname}" class="form-control">
+            <p th:if="${#fields.hasErrors('lname')}" class="text-danger" th:errors="*{lname}"></p>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:field="*{email}" class="form-control">
+            <p th:if="${#fields.hasErrors('email')}" class="text-danger" th:errors="*{email}"></p>
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" th:field="*{password}" class="form-control">
+            <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></p>
+        </div>
+
+        <!-- Age Field -->
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" th:field="*{age}" class="form-control">
+            <p th:if="${#fields.hasErrors('age')}" class="text-danger" th:errors="*{age}"></p>
+        </div>
+
+        <!-- Location Field -->
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" th:field="*{location}" class="form-control">
+            <p th:if="${#fields.hasErrors('location')}" class="text-danger" th:errors="*{location}"></p>
+        </div>
+
+        <!-- Sex Field -->
+        <div class="form-group">
+            <label for="sex">Sex:</label>
+            <input type="text" id="sex" name="sex" th:field="*{sex}" class="form-control">
+            <p th:if="${#fields.hasErrors('sex')}" class="text-danger" th:errors="*{sex}"></p>
+        </div>
+
+
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Create User</button>
+    </form>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

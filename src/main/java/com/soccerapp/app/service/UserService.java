@@ -1,12 +1,15 @@
 package com.soccerapp.app.service;
 
 import com.soccerapp.app.dto.UserDto;
+import com.soccerapp.app.models.User;
 
 import java.util.Collection;
 import java.util.List;
 
 public interface UserService {
     List<UserDto> findAllUsers();
+
+    UserDto findUserByEmail(String email);
 
     UserDto createUser(UserDto userDto);
 
@@ -17,4 +20,6 @@ public interface UserService {
     void updateUser(UserDto userDto);
 
     public void updateUserFields(UserDto userDto);
+
+    public void updatePasswords();
 }

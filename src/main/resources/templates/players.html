@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Players List</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h1>Players for Logged-in User</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Position</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="player : ${players}">
+        <td th:text="${player.playerId}"></td>
+        <td th:text="${player.position}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

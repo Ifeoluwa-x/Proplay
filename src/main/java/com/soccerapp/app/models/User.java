@@ -5,8 +5,13 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -30,7 +35,7 @@ public class User {
 
     @NotNull(message = "Email cannot be null")
     @Email(message = "Email should be valid")
-    @Column(name = "email_id", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @NotEmpty(message = "password cannot be null")
@@ -38,22 +43,8 @@ public class User {
     private String password;
 
     @NotNull(message = "Age cannot be null")
-    @Min(value = 18, message = "Age must be at least 18")
-    @Max(value = 50, message = "Age must be less than 50")
     @Column(name = "age", nullable = false)
     private int age;
-
-    @NotEmpty(message = "Position cannot be empty")
-    @Column(name = "position", nullable = false)
-    private String position;
-
-    @NotEmpty(message = "Skill level cannot be empty")
-    @Column(name = "skill_level", nullable = false)
-    private String skillLevel;
-
-    @NotEmpty(message = "Availability cannot be empty")
-    @Column(name = "availability", nullable = false)
-    private String availability;
 
     @NotEmpty(message = "Location cannot be empty")
     @Column(name = "location", nullable = false)
@@ -63,13 +54,22 @@ public class User {
     @Column(name = "sex", nullable = false)
     private String sex;
 
-    @Column(name = "team")
-    private String team;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
+    )
+
+    private List<Role> roles = new ArrayList<>();
+
+
+
 }
 
