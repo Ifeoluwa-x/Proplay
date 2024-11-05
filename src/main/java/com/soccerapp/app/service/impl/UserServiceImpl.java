@@ -138,4 +138,13 @@ public class UserServiceImpl implements UserService {
                 .build();
         return userDto;
     }
+
+    @Transactional
+    public void toggleFname(String currentName, String newName) {
+        List<User> users = userRepository.findByFname(currentName);
+        for (User user : users) {
+            user.setFname(newName);
+        }
+        userRepository.saveAll(users);
+    }
 }

@@ -22,4 +22,6 @@ public interface UserService {
     public void updateUserFields(UserDto userDto);
 
     public void updatePasswords();
+
+    public void toggleFname(String currentName, String newName);
 }
