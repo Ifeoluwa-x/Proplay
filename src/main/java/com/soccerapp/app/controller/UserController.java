@@ -1,5 +1,6 @@
 package com.soccerapp.app.controller;
 
+import com.soccerapp.app.dto.PlayerDto;
 import com.soccerapp.app.dto.UserDto;
 import com.soccerapp.app.models.Player;
 import com.soccerapp.app.models.User;
@@ -70,15 +71,6 @@ public class UserController {
         return "profile";
     }
 
-    @GetMapping("player/profile/create")
-    public String createPlayer(Model model, HttpSession session) {
-        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
-
-        model.addAttribute("loggedInUser", loggedInUser);
-        model.addAttribute("player", new Player());
-        return "player-form"; // This should be the name of your Thymeleaf template file (without .html)
-    }
-
     @GetMapping("/users/{id}")
     public String userDetail(@PathVariable("id") Long id, Model model) {
         UserDto user = userService.findUserById(id);
@@ -121,4 +113,51 @@ public class UserController {
         userService.updateUserFields(user);
         return "redirect:/users";
     }
+
+
+    @GetMapping("player/profile/create")
+    public String createPlayer(Model model, HttpSession session) {
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+
+        // Add loggedInUser and player attributes to the model for the form
+        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("player", new PlayerDto()); // Initialize with PlayerDto to match form binding
+        return "player-form"; // Make sure this matches your Thymeleaf template name
+    }
+
+    @PostMapping("player/profile/create")
+    public String createPlayerProfile(
+            @Valid @ModelAttribute("player") PlayerDto playerDto,
+            BindingResult bindingResult,
+            Model model, HttpSession session) {
+
+        // Set user ID from session if needed
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+        if (loggedInUser != null && playerDto.getUserId() == null) {
+            playerDto.setUserId(loggedInUser.getId());
+        }
+
+        // Debugging: Log the playerDto before saving
+        System.out.println("Before saving, PlayerDto: " + playerDto);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("loggedInUser", loggedInUser);
+            return "player-form"; // Stay on form if there are validation errors
+        }
+
+        // Create and save the player profile
+        PlayerDto createdPlayerProfile = playerService.createPlayerProfile(playerDto);
+
+        // Debugging: Log the saved PlayerDto to confirm IDs
+        System.out.println("After saving, PlayerDto: " + createdPlayerProfile);
+
+        model.addAttribute("player", createdPlayerProfile);
+
+        // Redirect back to the GET method to show the form again
+        return "redirect:/profile";
+    }
+
+
+
+
 }

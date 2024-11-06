@@ -15,16 +15,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PlayerDto {
-    private Integer playerId;
+    private Long playerId;
     private String availability;
     private String position;
     private String skillLevel;
     private String playerBio;
-
-    private String fname;
-    private String lname;
-    private String email;
-    private int age;
-    private String sex;
-    private String team;
+    private Long teamId;
+    private Long userId;
 }

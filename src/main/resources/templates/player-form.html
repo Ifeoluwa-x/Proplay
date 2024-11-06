@@ -15,7 +15,7 @@
         <strong>Name:</strong> <span th:text="${loggedInUser.fname} + ' ' + ${loggedInUser.lname}">Full Name</span>
     </div>
 
-    <form th:action="@{/players/save}" method="post" th:object="${player}" class="needs-validation" novalidate>
+    <form th:action="@{/player/profile/create}" method="post" th:object="${player}" class="needs-validation" novalidate>
         <div class="form-group">
             <label for="availability">Availability</label>
             <input type="text" id="availability" class="form-control" th:field="*{availability}" required>

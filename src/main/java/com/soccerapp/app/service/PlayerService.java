@@ -9,4 +9,6 @@ import java.util.List;
 public interface PlayerService {
 
     List<Player> getPlayersByUserId(Long userId);
+
+    PlayerDto createPlayerProfile(PlayerDto playerDto);
 }
