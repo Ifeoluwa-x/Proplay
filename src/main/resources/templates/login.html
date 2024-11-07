@@ -1,34 +1,32 @@
-<html
-        xmlns:th="http://thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
 <head>
   <title>Register</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
-      background-color: #f8f9fa;
+      background-color: #1e1e1e;
       font-family: Arial, sans-serif;
     }
 
     .main {
       width: 100%;
-      max-width: 800px;  /* Set a max-width for larger screens */
+      max-width: 800px;
       padding: 30px 10px;
-      /*background-color: aqua;*/
-      margin: 0 auto;    /* Center horizontally */
+      margin: 0 auto;
     }
 
     section {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;     /* Full viewport height for vertical centering */
+      height: 100vh;
     }
 
     .login-form {
-      background-color: white;
+      background-color: #1e1e1e;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -42,7 +40,23 @@
     button.btn {
       width: 100%;
       margin-top: 10px;
+      background-color: #4b69b0 !important;
     }
+    .form-group{
+      color: white;
+    }
+    .form-control{
+      background-color: #303030;
+      border: none;
+
+    }
+
+    .form-control:focus {
+      background-color: #303030; /* Maintains the same color when clicked */
+      color: white;
+      box-shadow: none; /* Removes the default focus outline */
+    }
+
     .register-button-container {
       display: flex;
       justify-content: center;
@@ -50,29 +64,55 @@
     }
 
     .register-button {
-      background-color: #007bff; /* Primary blue color */
+      background-color: #4b69b0;
       color: #fff;
       font-size: 1rem;
       padding: 10px 20px;
       border: none;
-      border-radius: 8px; /* Rounded corners */
+      border-radius: 8px;
       text-align: center;
-      text-decoration: none; /* Remove underline */
+      text-decoration: none;
       transition: background-color 0.3s, transform 0.2s;
     }
 
     .register-button:hover {
-      background-color: #0056b3; /* Darker shade for hover */
-      transform: scale(1.05); /* Slightly enlarge on hover */
+      background-color: #0056b3;
+      transform: scale(1.05);
     }
 
     .register-button:focus {
-      outline: none; /* Remove outline on focus */
+      outline: none;
     }
 
     .register-button:active {
-      background-color: #004085; /* Darkest shade when clicked */
-      transform: scale(0.98); /* Slightly reduce size when clicked */
+      background-color: #4b69b0;
+      transform: scale(0.98);
+    }
+
+    .custom-hidden {
+      display: none !important;
+    }
+
+    /* ProPlay Logo */
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-text {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    .logo-text .pro {
+      color: #fff;
+      background-color: #4b69b0;
+      padding: 0 5px;
+      border-radius: 5px;
+    }
+
+    .logo-text .play {
+      color: #4b69b0;
     }
 
     /* Responsive adjustments */
@@ -80,22 +120,25 @@
       .login-form {
         margin-top: 10%;
       }
-    }
 
-    /* Remove this block to prevent shifting */
-    /*@media screen and (min-width: 768px) {
-      .main {
-        margin-left: 30%;
+      .logo-text {
+        font-size: 2rem;
       }
-    }*/
+    }
   </style>
-
 </head>
+
 <body>
-<section layout:fragment="body" >
+<section layout:fragment="body">
   <div class="main">
     <div class="col-md-6 col-sm-12 mx-auto">
-      <h2 class="text-center">Login</h2>
+      <!-- ProPlay Logo -->
+      <div class="logo-container">
+        <div class="logo-text">
+          <span class="pro">Pro</span><span class="play">Play</span>
+        </div>
+      </div>
+
       <div th:if="${param.success}" class="alert alert-success">
         Account Created Successfully. Kindly Login Below
       </div>
@@ -109,23 +152,11 @@
         <form method="post" th:action="@{/login}">
           <div class="form-group">
             <label for="username">Email</label>
-            <input
-                    id="username"
-                    type="text"
-                    class="form-control"
-                    placeholder="Email"
-                    name="username" required>
-<!--            <p th:if="${#fields.hasErrors('username')}" class="text-danger" th:errors="*{username}"></p>-->
+            <input id="username" type="text" class="form-control" placeholder="Email" name="username" required>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input
-                    id="password"
-                    type="password"
-                    class="form-control"
-                    placeholder="Password"
-                    name="password" required>
-<!--            <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></p>-->
+            <input id="password" type="password" class="form-control" placeholder="Password" name="password" required>
           </div>
           <button type="submit" class="btn btn-secondary">Login</button>
           <div class="text-center mt-3">
@@ -143,4 +174,5 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

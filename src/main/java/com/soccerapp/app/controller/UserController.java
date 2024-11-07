@@ -1,11 +1,14 @@
 package com.soccerapp.app.controller;
 
 import com.soccerapp.app.dto.PlayerDto;
+import com.soccerapp.app.dto.TeamDto;
 import com.soccerapp.app.dto.UserDto;
 import com.soccerapp.app.models.Player;
+import com.soccerapp.app.models.Team;
 import com.soccerapp.app.models.User;
 //import com.soccerapp.app.security.CustomUserDetail;
 import com.soccerapp.app.service.PlayerService;
+import com.soccerapp.app.service.TeamService;
 import com.soccerapp.app.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -28,12 +31,14 @@ import static com.soccerapp.app.utils.DateUtil.getDayWithSuffix;
 public class UserController {
     private UserService userService;
     private PlayerService playerService;
+    private TeamService teamService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
-    public UserController(UserService userService, PlayerService playerService) {
+    public UserController(UserService userService, PlayerService playerService, TeamService teamService) {
         this.userService = userService;
         this.playerService = playerService;
+        this.teamService = teamService;
     }
 
     @GetMapping("/profile")
@@ -45,6 +50,8 @@ public class UserController {
         Long loggedInUserId = user.getId();
 
         List<Player> players = playerService.getPlayersByUserId(loggedInUserId);
+
+        List<Team> teams = teamService.getTeamByUserId(loggedInUserId);
 
         // Format the createdAt and updatedAt dates
         // Create a DateTimeFormatter for the full month name
@@ -64,6 +71,7 @@ public class UserController {
         model.addAttribute("formattedCreatedAt", formattedCreatedAt);
         model.addAttribute("formattedUpdatedAt", formattedUpdatedAt);
         model.addAttribute("players", players);
+        model.addAttribute("teams", teams);
 
         // Store the user in the session
         session.setAttribute("loggedInUser", user);
@@ -156,6 +164,53 @@ public class UserController {
         // Redirect back to the GET method to show the form again
         return "redirect:/profile";
     }
+
+    @GetMapping("/team/create")
+    public String createTeam(Model model, HttpSession session) {
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+
+        // Add loggedInUser and player attributes to the model for the form
+        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("team", new TeamDto()); // Initialize with TeamDto to match form binding
+        return "team_form"; // Make sure this matches your Thymeleaf template name
+    }
+
+    @PostMapping("/team/create")
+    public String createTeam(
+            @Valid @ModelAttribute("team") TeamDto teamDto,
+            BindingResult bindingResult,
+            Model model, HttpSession session) {
+
+        // Get the logged-in user from session
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+
+        // Set the owner ID from the logged-in user if it's not already set in the TeamDto
+        if (loggedInUser != null && teamDto.getOwnerId() == null) {
+            teamDto.setOwnerId(loggedInUser.getId());
+        }
+
+        // Debugging: Log the teamDto before saving
+        System.out.println("Before saving, TeamDto: " + teamDto);
+
+        // Check if the teamDto has errors
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("loggedInUser", loggedInUser);
+            return "team_form"; // Stay on the form if there are validation errors
+        }
+
+        // Map TeamDto to Team entity
+        TeamDto createdTeam = teamService.createTeam(teamDto);
+
+        // Debugging: Log the saved TeamDto
+        System.out.println("After saving, TeamDto: " + createdTeam);
+
+        // Add createdTeam to the model
+        model.addAttribute("team", createdTeam);
+
+        // Redirect back to the profile page
+        return "redirect:/profile";
+    }
+
 
 
 

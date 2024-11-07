@@ -36,13 +36,6 @@ public class PlayerServiceImpl implements PlayerService { // Implement the Playe
         return playerRepository.findByUserId(userId);
     }
 
-//    public PlayerDto createPlayerProfile(PlayerDto playerDto) {
-//        // Convert UserDto to User entity
-//        Player player = mapToPlayer(playerDto);
-//        Player savedPlayerProfile = playerRepository.save(player);
-//        // Convert saved Player entity back to PlayerDto and return
-//        return mapToDto(savedPlayerProfile);
-//    }
 
     public PlayerDto createPlayerProfile(PlayerDto playerDto) {
         Player player = mapToPlayer(playerDto);
@@ -67,19 +60,6 @@ public class PlayerServiceImpl implements PlayerService { // Implement the Playe
                 .team(playerDto.getTeamId())
                 .build();
     }
-
-//    private PlayerDto mapToPlayerDto(Player player) {
-//        PlayerDto playerDto = PlayerDto.builder()
-//                .playerId(player.getId())
-//                .playerBio(player.getPlayerBio())
-//                .availability(player.getAvailability())
-//                .position(player.getPosition())
-//                .skillLevel(player.getSkillLevel())
-//                .teamId(player.getTeam())
-//                .userId(player.getUser().getId())
-//                .build();
-//        return playerDto;
-//    }
 
     private PlayerDto mapToDto(Player player) {
         return PlayerDto.builder()

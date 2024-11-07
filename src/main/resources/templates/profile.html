@@ -6,6 +6,11 @@
   <title>User and Player Profile</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+  div{
+    /*border: 1px solid red;*/
+  }
+</style>
 <body>
 <div class="container mt-5">
   <div class="card">
@@ -57,7 +62,7 @@
             </tr>
             </thead>
             <tbody>
-            <!-- Loop through each player -->
+            <!-- Check if players are empty and display message or list -->
             <tr th:if="${players.isEmpty()}">
               <td colspan="6" class="text-center">
                 <a href="/player/profile/create" class="btn btn-primary">Create a Player Profile</a>
@@ -66,20 +71,95 @@
             <tr th:each="player : ${players}">
               <td th:text="${player.id}"></td>
               <td th:text="${player.position}"></td>
-              <td th:text="${player.team}"></td>
+              <td th:text="${player.team != null ? player.team.teamName : 'No Team'}"></td>
               <td th:text="${player.skillLevel}"></td>
               <td th:text="${player.availability}"></td>
-              <td th:text="${player.playerBio}"></td>
+              <td th:text="${player.playerBio != null ? player.playerBio : 'No Bio'}"></td>
             </tr>
             </tbody>
           </table>
         </div>
       </div>
-      <div class="text-center logout-btn">
+
+      <!-- Loop through each team -->
+      <div th:if="${teams != null and teams.size() > 0}">
+        <h4>Teams</h4>
+        <div th:each="team : ${teams}">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 th:text="${team.teamName}">Team Name</h5>
+            </div>
+            <div class="card-body">
+              <!-- Team Information -->
+              <div class="text-center mb-4">
+                <img th:src="${team.teamLogo != null ? team.teamLogo : 'default-logo.jpg'}"
+                     alt="Team Logo" class="img-fluid" style="max-height: 150px;">
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <strong>Location:</strong> <span th:text="${team.teamLocation}">Team Location</span>
+                </li>
+                <li class="list-group-item">
+                  <strong>Created At:</strong> <span th:text="${#dates.format(team.createdAt, 'yyyy-MM-dd HH:mm')}">Creation Date</span>
+                </li>
+                <li class="list-group-item">
+                  <strong>Description:</strong> <span th:text="${team.teamDesc != null ? team.teamDesc : 'No Description'}">Team Description</span>
+                </li>
+              </ul>
+
+              <!-- Leadership Information -->
+              <div class="mt-4">
+                <h6>Leadership</h6>
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <strong>Captain:</strong>
+                    <span th:text="${team.teamCaptain != null ? team.teamCaptain.user.firstName + ' ' + team.teamCaptain.user.lastName : 'No Captain Assigned'}">Captain Name</span>
+                  </li>
+                  <li class="list-group-item">
+                    <strong>Vice-Captain:</strong>
+                    <span th:text="${team.teamVice != null ? team.teamVice.user.firstName + ' ' + team.teamVice.user.lastName : 'No Vice-Captain Assigned'}">Vice-Captain Name</span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Players List -->
+              <div class="mt-4">
+                <h6>Players</h6>
+                <ul class="list-group">
+                  <li class="list-group-item" th:each="player : ${team.players}">
+                    <span th:text="${player.user.firstName + ' ' + player.user.lastName}">Player Name</span> -
+                    <span th:text="${player.position}">Position</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Show message if no teams are available -->
+      <div th:if="${teams == null or teams.size() == 0}">
+        <p></p>
+        <a href="/team/create" class="btn btn-primary">Create New Team</a>
+      </div>
+
+
+        </div>
+      </div>
+
+      <!-- Show 'Create New Team' button if no team is available -->
+      <div th:if="${team == null || team.players.isEmpty()}" class="text-center mt-4">
+        <a href="/team/create" class="btn btn-primary">Create New Team</a>
+      </div>
+
+      <!-- Logout Button -->
+      <div class="text-center mt-4">
         <form th:action="@{/logout}" method="post">
           <button type="submit" class="btn btn-danger">Logout</button>
         </form>
       </div>
+
     </div>
   </div>
 </div>

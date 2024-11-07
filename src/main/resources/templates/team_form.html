@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create New Team</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="alert alert-info">
+        <strong>Logged in as:</strong> <span th:text="${loggedInUser.email}">Email</span><br>
+        <strong>User Id</strong> <span th:text="${loggedInUser.id}">Id</span><br>
+        <strong>Name:</strong> <span th:text="${loggedInUser.fname} + ' ' + ${loggedInUser.lname}">Full Name</span>
+    </div>
+    <h2>Create New Team</h2>
+    <form th:action="@{/team/create}" th:method="post" th:object="${team}" class="needs-validation" novalidate>
+
+        <!-- Team Name -->
+        <div class="form-group">
+            <label for="teamName">Team Name</label>
+            <input type="text" th:field="*{teamName}" class="form-control" id="teamName" placeholder="Enter team name" required>
+            <div class="invalid-feedback">Please enter a team name.</div>
+        </div>
+
+        <!-- Team Logo URL -->
+        <div class="form-group">
+            <label for="teamLogo">Team Logo URL</label>
+            <input type="url" th:field="*{teamLogo}" class="form-control" id="teamLogo" placeholder="Enter logo URL">
+            <small class="form-text text-muted">Optional: Provide a URL for the team's logo image.</small>
+        </div>
+
+        <!-- Team Location -->
+        <div class="form-group">
+            <label for="teamLocation">Location</label>
+            <input type="text" th:field="*{teamLocation}" class="form-control" id="teamLocation" placeholder="Enter team location" required>
+            <div class="invalid-feedback">Please enter the team location.</div>
+        </div>
+
+        <!-- Team Description -->
+        <div class="form-group">
+            <label for="teamDesc">Description</label>
+            <textarea th:field="*{teamDesc}" class="form-control" id="teamDesc" rows="3" placeholder="Describe your team..."></textarea>
+        </div>
+
+        <!-- Team Captain -->
+        <div class="form-group">
+            <label for="teamCaptain">Team Captain</label>
+            <select th:field="*{teamCaptainId}" class="form-control" id="teamCaptain">
+                <option th:each="player : ${players}" th:value="${player.id}" th:text="${player.user.firstName + ' ' + player.user.lastName}">Select Captain</option>
+            </select>
+            <small class="form-text text-muted">Optional: Select a team captain from available players.</small>
+        </div>
+
+        <!-- Team Vice-Captain -->
+        <div class="form-group">
+            <label for="teamVice">Team Vice-Captain</label>
+            <select th:field="*{teamViceId}" class="form-control" id="teamVice">
+                <option th:each="player : ${players}" th:value="${player.id}" th:text="${player.user.firstName + ' ' + player.user.lastName}">Select Vice-Captain</option>
+            </select>
+            <small class="form-text text-muted">Optional: Select a vice-captain from available players.</small>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Create Team</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Bootstrap validation for form fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+
+</body>
+</html>
