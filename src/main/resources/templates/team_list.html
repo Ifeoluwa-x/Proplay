@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Teams</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .team-logo {
+      width: 100%;   /* Ensure the image takes up full width of the card */
+      height: 200px; /* Set a fixed height for the image */
+      object-fit: cover;  /* Ensure the image covers the container without stretching */
+      object-position: center;  /* Center the image */
+    }
+
+    .card-img-top {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+  <h2 class="text-center">All Teamsssss</h2>
+
+  <!-- Display a message if there are no teams -->
+  <div th:if="${teams.isEmpty()}" class="text-center mt-3">
+    <p>No teams available at the moment.</p>
+    <a href="/team/create" class="btn btn-primary">Create a New Team</a>
+  </div>
+
+  <!-- Team cards grid -->
+  <div class="row row-cols-1 row-cols-md-3 g-4 mt-4" th:if="${!teams.isEmpty()}">
+    <div class="col" th:each="team : ${teams}">
+      <div class="card h-100">
+        <!-- Team Logo -->
+        <img th:src="${team.teamLogo != null ? team.teamLogo : '/images/default-logo.jpg'}"
+             class="card-img-top team-logo" alt="Team Logo">
+
+        <!-- Team Details -->
+        <div class="card-body">
+          <h5 class="card-title" th:text="${team.teamName}">Team Name</h5>
+          <p class="card-text">
+            <strong>Location:</strong> <span th:text="${team.teamLocation}">Location</span><br>
+            <strong>Description:</strong> <span th:text="${team.teamDesc != null ? team.teamDesc : 'No Description'}">Description</span>
+          </p>
+        </div>
+
+        <!-- Card footer with leadership details and link to view team -->
+        <div class="card-footer">
+          <p><strong>Captain:</strong>
+<!--            <span th:text="${team.teamCaptain != null ? team.teamCaptain.player.user.fname + ' ' + team.teamCaptain.player.user.lname : 'No Captain Assigned'}">Captain Name</span>-->
+          </p>
+          <p><strong>Vice-Captain:</strong>
+<!--            <span th:text="${team.teamVice != null ? team.teamVice.user.fname + ' ' + team.teamVice.user.lname : 'No Vice-Captain Assigned'}">Vice-Captain Name</span>-->
+          </p>
+
+          <!-- Send Request to Join Team Button -->
+          <div class="text-center">
+            <!-- Wrap the button in a form and use POST method -->
+            <form th:action="@{/player/sendRequest/{teamId}/{playerId}(teamId=${team.teamId}, playerId=${playerId})}" method="post">
+              <button type="submit" class="btn btn-warning btn-sm w-100 mt-2"
+                      th:text="${requestSentMap[team.teamId] ? 'Request Sent' : 'Send Request to Join Team'}"
+                      th:disabled="${requestSentMap[team.teamId]}"> <!-- Disable button if request is already sent -->
+              </button>
+            </form>
+          </div>
+
+          <a th:href="@{/team/{id}(id=${team.teamId})}" class="btn btn-primary btn-sm w-100 mt-2">View Team</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

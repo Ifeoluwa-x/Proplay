@@ -5,9 +5,13 @@ import com.soccerapp.app.dto.TeamDto;
 import com.soccerapp.app.dto.UserDto;
 import com.soccerapp.app.models.Player;
 import com.soccerapp.app.models.Team;
+import com.soccerapp.app.models.TeamRequest;
 import com.soccerapp.app.models.User;
 //import com.soccerapp.app.security.CustomUserDetail;
+import com.soccerapp.app.repository.PlayerRepository;
+import com.soccerapp.app.repository.TeamRepository;
 import com.soccerapp.app.service.PlayerService;
+import com.soccerapp.app.service.TeamReqService;
 import com.soccerapp.app.service.TeamService;
 import com.soccerapp.app.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -29,16 +33,22 @@ import static com.soccerapp.app.utils.DateUtil.getDayWithSuffix;
 
 @Controller
 public class UserController {
+
+
+
+    @Autowired
     private UserService userService;
     private PlayerService playerService;
     private TeamService teamService;
+    private TeamReqService teamReqService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
-    public UserController(UserService userService, PlayerService playerService, TeamService teamService) {
+    public UserController(UserService userService, PlayerService playerService, TeamService teamService, TeamReqService teamReqService  ) {
         this.userService = userService;
         this.playerService = playerService;
         this.teamService = teamService;
+        this.teamReqService = teamReqService;
     }
 
     @GetMapping("/profile")
@@ -121,98 +131,4 @@ public class UserController {
         userService.updateUserFields(user);
         return "redirect:/users";
     }
-
-
-    @GetMapping("player/profile/create")
-    public String createPlayer(Model model, HttpSession session) {
-        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
-
-        // Add loggedInUser and player attributes to the model for the form
-        model.addAttribute("loggedInUser", loggedInUser);
-        model.addAttribute("player", new PlayerDto()); // Initialize with PlayerDto to match form binding
-        return "player-form"; // Make sure this matches your Thymeleaf template name
-    }
-
-    @PostMapping("player/profile/create")
-    public String createPlayerProfile(
-            @Valid @ModelAttribute("player") PlayerDto playerDto,
-            BindingResult bindingResult,
-            Model model, HttpSession session) {
-
-        // Set user ID from session if needed
-        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
-        if (loggedInUser != null && playerDto.getUserId() == null) {
-            playerDto.setUserId(loggedInUser.getId());
-        }
-
-        // Debugging: Log the playerDto before saving
-        System.out.println("Before saving, PlayerDto: " + playerDto);
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("loggedInUser", loggedInUser);
-            return "player-form"; // Stay on form if there are validation errors
-        }
-
-        // Create and save the player profile
-        PlayerDto createdPlayerProfile = playerService.createPlayerProfile(playerDto);
-
-        // Debugging: Log the saved PlayerDto to confirm IDs
-        System.out.println("After saving, PlayerDto: " + createdPlayerProfile);
-
-        model.addAttribute("player", createdPlayerProfile);
-
-        // Redirect back to the GET method to show the form again
-        return "redirect:/profile";
-    }
-
-    @GetMapping("/team/create")
-    public String createTeam(Model model, HttpSession session) {
-        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
-
-        // Add loggedInUser and player attributes to the model for the form
-        model.addAttribute("loggedInUser", loggedInUser);
-        model.addAttribute("team", new TeamDto()); // Initialize with TeamDto to match form binding
-        return "team_form"; // Make sure this matches your Thymeleaf template name
-    }
-
-    @PostMapping("/team/create")
-    public String createTeam(
-            @Valid @ModelAttribute("team") TeamDto teamDto,
-            BindingResult bindingResult,
-            Model model, HttpSession session) {
-
-        // Get the logged-in user from session
-        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
-
-        // Set the owner ID from the logged-in user if it's not already set in the TeamDto
-        if (loggedInUser != null && teamDto.getOwnerId() == null) {
-            teamDto.setOwnerId(loggedInUser.getId());
-        }
-
-        // Debugging: Log the teamDto before saving
-        System.out.println("Before saving, TeamDto: " + teamDto);
-
-        // Check if the teamDto has errors
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("loggedInUser", loggedInUser);
-            return "team_form"; // Stay on the form if there are validation errors
-        }
-
-        // Map TeamDto to Team entity
-        TeamDto createdTeam = teamService.createTeam(teamDto);
-
-        // Debugging: Log the saved TeamDto
-        System.out.println("After saving, TeamDto: " + createdTeam);
-
-        // Add createdTeam to the model
-        model.addAttribute("team", createdTeam);
-
-        // Redirect back to the profile page
-        return "redirect:/profile";
-    }
-
-
-
-
-
 }

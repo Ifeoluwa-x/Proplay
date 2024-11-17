@@ -1,8 +1,6 @@
 package com.soccerapp.app.service.impl;
 
-import com.soccerapp.app.dto.PlayerDto;
 import com.soccerapp.app.dto.TeamDto;
-import com.soccerapp.app.dto.UserDto;
 import com.soccerapp.app.models.Player;
 import com.soccerapp.app.models.Team;
 import com.soccerapp.app.models.User;
@@ -47,6 +45,35 @@ public class TeamServiceImpl implements TeamService {
         return teamRepository.findByUserId(userId);
     }
 
+    public void addPlayerToTeam(Long teamId, Long playerId) {
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new RuntimeException("Team not found"));
+        Player player = playerRepository.findById(playerId).orElseThrow(() -> new RuntimeException("Player not found"));
+
+        player.setTeam(team);
+        playerRepository.save(player);  // Save the player to associate them with the team
+    }
+
+    public Team getTeamById(Long teamId) {
+        return teamRepository.findById(teamId).orElseThrow(() -> new RuntimeException("Team not found"));
+    }
+
+    public TeamDto findByTeamId(long id){
+        Team team = teamRepository.findByTeamId(id).orElseThrow(() -> new RuntimeException("Team not found"));
+        return mapToDto(team);
+    }
+
+    public List<TeamDto> getAllTeams() {
+        // Retrieve all teams as Team entities
+        List<Team> teams = teamRepository.findAll();
+
+        // Convert each Team entity to TeamDto
+        return teams.stream()
+                .map(this::mapToDto)  // Call a helper method to convert each Team to TeamDto
+                .collect(Collectors.toList());
+    }
+
+
+
 
 
 
@@ -82,15 +109,16 @@ public class TeamServiceImpl implements TeamService {
                 .teamId(teamDto.getTeamId())
                 .teamName(teamDto.getTeamName())
                 .teamLogo(teamDto.getTeamLogo())
-                .teamCaptain(captain)
-                .teamVice(viceCaptain)
+                .teamCaptain(captain) // Set captain (null if not provided)
+                .teamVice(viceCaptain) // Set vice-captain (null if not provided)
                 .teamLocation(teamDto.getTeamLocation())
                 .createdAt(teamDto.getCreatedAt())
                 .teamDesc(teamDto.getTeamDesc())
-                .user(owner)
-                .players(players)
+                .user(owner) // Owner (User)
+                .players(players) // List of players
                 .build();
     }
+
 
 
 

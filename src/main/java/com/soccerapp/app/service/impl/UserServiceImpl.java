@@ -107,6 +107,21 @@ public class UserServiceImpl implements UserService {
         userRepository.updateUserFields( userDto.getId(), userDto.getEmail(), userDto.getLocation());
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private User mapToUser(UserDto user) {
         User userDto = User.builder()
                 .id(user.getId())

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Requests</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h2>Your Team Requests</h2>
+
+  <div th:if="${requests.isEmpty()}">
+    <p>You have no team requests at the moment.</p>
+  </div>
+
+  <div th:each="request : ${requests}" class="card mt-3">
+    <div class="card-body">
+      <p><strong>Player ID:</strong> <span th:text="${request.player.id}"></span></p>
+      <h5 class="card-title" th:text="'Request from Team: ' + ${request.team.teamName}"></h5>
+      <p class="card-text" th:text="${request.customMessage}">Custom message here</p>
+      <p><strong>Request Date:</strong> <span th:text="${request.createdAt}"></span></p>
+
+      <!-- Debugging: Show decision value -->
+      <p>Decision: <span th:text="${request.decision}"></span></p>
+
+      <div class="text-center">
+        <!-- Accept button (only if decision is 'pending') -->
+        <form th:action="@{/requests/accept/{id}/addPlayer/{teamId}/{playerId}(id=${request.id}, teamId=${request.team.teamId}, playerId=${request.player.id})}" method="post" style="display: inline;">
+            <button type="submit" class="btn btn-success" th:if="${request.decision == 'pending'}">Accept</button>
+        </form>
+
+        <!-- Decline button (only if decision is 'pending') -->
+        <form th:action="@{/requests/decline/{id}(id=${request.id})}" method="post" style="display: inline;">
+          <button type="submit" class="btn btn-danger"
+                  th:if="${request.decision == 'pending'}">Decline</button>
+        </form>
+
+        <!-- If already responded to -->
+        <span th:if="${request.decision == 'ACCEPTED'}" class="text-success">Accepted</span>
+        <span th:if="${request.decision == 'DECLINED'}" class="text-danger">Declined</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

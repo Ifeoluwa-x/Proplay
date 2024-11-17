@@ -23,4 +23,14 @@ public class TeamDto {
     private String teamDesc;
     private Long ownerId;
     private List<Long> playerIds;
+    private boolean requestSent;  // Add this field
+
+    // Getters and setters
+    public boolean isRequestSent() {
+        return requestSent;
+    }
+
+    public void setRequestSent(boolean requestSent) {
+        this.requestSent = requestSent;
+    }
 }

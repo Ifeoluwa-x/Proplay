@@ -20,6 +20,17 @@ public class PlayerDto {
     private String position;
     private String skillLevel;
     private String playerBio;
-    private Long teamId;
-    private Long userId;
+    private TeamDto team;
+    private UserDto user;
+
+    private boolean requestSent;  // Add this field
+
+    // Getters and setters
+    public boolean isRequestSent() {
+        return requestSent;
+    }
+
+    public void setRequestSent(boolean requestSent) {
+        this.requestSent = requestSent;
+    }
 }

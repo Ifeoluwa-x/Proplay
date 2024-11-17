@@ -1,25 +1,33 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Players List</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<h1>Players for Logged-in User</h1>
+<div class="container mt-5">
+    <div class="row">
+        <p th:text="'Team ID: ' + ${team.teamId}"></p>
+        <div th:each="player : ${players}" class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${player.user.fname} + ' ' + ${player.user.lname}">Player Name</h5>
+                    <p><strong>Position:</strong> <span th:text="${player.position}">Position</span></p>
+                    <p><strong>Skill Level:</strong> <span th:text="${player.skillLevel}">Skill Level</span></p>
+                    <p><strong>Availability:</strong> <span th:text="${player.availability}">Availability</span></p>
+                </div>
+                <div class="card-footer text-center">
+                    <form th:action="@{/team/{teamId}/sendRequest/{playerId}(teamId=${team.teamId}, playerId=${player.playerId})}" method="post">
+                        <button type="submit" class="btn btn-primary" th:text="${player.requestSent} ? 'Pending' : 'Send Request'"></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Position</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="player : ${players}">
-        <td th:text="${player.playerId}"></td>
-        <td th:text="${player.position}"></td>
-    </tr>
-    </tbody>
-</table>
+
 </body>
-</html>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

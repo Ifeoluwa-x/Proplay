@@ -35,7 +35,8 @@ public class Player {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column
-    private Long team;
-    // Getters and setters
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
+
 }
