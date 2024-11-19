@@ -52,5 +52,17 @@ public class Team {
     @OneToMany(mappedBy = "team")
     private List<Player> players;
 
+    /* suggestion gpt
+    @ManyToMany
+
+    @JoinTable(
+            name = "team_players",
+            joinColumns = @JoinColumn(name = "player_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id")
+    )
+
+    private List<Team> teams;
+    */
+
 
 }

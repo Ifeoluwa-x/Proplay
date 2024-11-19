@@ -60,6 +60,11 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+//Link the Subscription entity with User
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Subscription> subscriptions = new ArrayList<>();
+
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",
