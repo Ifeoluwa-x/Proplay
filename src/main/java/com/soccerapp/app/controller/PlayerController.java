@@ -21,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,8 @@ public class PlayerController {
     UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
 
     // Add loggedInUser and player attributes to the model for the form
-    model.addAttribute("loggedInUser", loggedInUser);
+
+    model.addAttribute("user", loggedInUser);
     model.addAttribute("player", new PlayerDto()); // Initialize with PlayerDto to match form binding
     return "player-form"; // Make sure this matches your Thymeleaf template name
     }
@@ -53,7 +55,10 @@ public class PlayerController {
     public String createPlayerProfile(
             @Valid @ModelAttribute("player") PlayerDto playerDto,
             BindingResult bindingResult,
-            Model model, HttpSession session) {
+            Model model, HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+
 
         // Set user ID from session if needed
         UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
@@ -77,13 +82,14 @@ public class PlayerController {
         System.out.println("After saving, PlayerDto: " + createdPlayerProfile);
 
         model.addAttribute("player", createdPlayerProfile);
-
+        // Add a success message as a flash attribute
+        redirectAttributes.addFlashAttribute("successMessage", "Player profile successfully created");
         // Redirect back to the GET method to show the form again
         return "redirect:/profile";
     }
 
     @GetMapping("/view/teams")
-    public String listAllTeams(HttpSession session, Model model) {
+    public String listAllTeams(HttpSession session, @RequestParam(value = "location", required = false) String location, Model model) {
         // Retrieve the logged-in user from the session
         UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
 
@@ -96,17 +102,22 @@ public class PlayerController {
         Long loggedInUserId = loggedInUser.getId();
 
         // Fetch the player associated with this user ID
-        Player player = playerService.getPlayersByUserId(loggedInUserId).stream().findFirst()
-                .orElse(null);
+        Player player = playerService.getPlayersByUserId(loggedInUserId).stream().findFirst().orElse(null);
 
         if (player == null) {
-            model.addAttribute("message", "No player profile found. Please create a player profile.");
-            return "error_page";  // Return an error view or similar
+            model.addAttribute("user", loggedInUser);
+            model.addAttribute("player", null);
+            model.addAttribute("teams", Collections.emptyList());  // Make sure teams is initialized
+            return "team_list";
         }
+
         Long playerId = player.getId();
 
-        // Retrieve all teams as TeamDto
+        // Retrieve all teams based on the location filter (if provided)
         List<TeamDto> teams = teamService.getAllTeams();
+        if (location != null && !location.trim().isEmpty()) {
+            teams = teamService.getTeamsByLocation(location);  // Filter by location
+        }
 
         // Prepare requestSentMap to check if the request has already been sent for each team
         Map<Long, Boolean> requestSentMap = new HashMap<>();
@@ -114,16 +125,18 @@ public class PlayerController {
             boolean isRequestSent = playerReqService.isRequestSent(team.getTeamId(), playerId);
             requestSentMap.put(team.getTeamId(), isRequestSent);
         }
-        if (teams == null || teams.isEmpty()) {
-            model.addAttribute("message", "No teams available at the moment.");
-        } else {// Add teams, requestSentMap, and the player to the model
-            model.addAttribute("teams", teams);
-            model.addAttribute("requestSentMap", requestSentMap);
-            model.addAttribute("playerId", playerId);model.addAttribute("teams", teams);
-        }
+
+        // Add teams, requestSentMap, and the player to the model
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("teams", teams != null ? teams : Collections.emptyList());  // Ensure it's not null
+        model.addAttribute("requestSentMap", requestSentMap);
+        model.addAttribute("playerId", playerId);
+        model.addAttribute("player", player);
 
         return "team_list";  // View name
     }
+
+
 
 
 

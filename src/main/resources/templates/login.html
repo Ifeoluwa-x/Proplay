@@ -79,7 +79,10 @@
     }
 
     .register-button:hover {
-      background-color: #0056b3;
+      /*background-color: #0056b3;*/
+      color: white;
+      text-decoration-line: none;
+      border: 1px solid white;
       transform: scale(1.05);
     }
 
@@ -163,7 +166,7 @@
           </div>
           <button type="submit" class="btn btn-secondary">Login</button>
           <div class="text-center mt-3">
-            <span>Don't have an account?</span>
+            <span style="color: white">Don't have an account?</span>
             <div class="register-button-container">
               <a th:href="@{/register}" class="register-button">Register here.</a>
             </div>

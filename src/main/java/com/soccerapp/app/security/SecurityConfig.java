@@ -39,6 +39,7 @@ public class SecurityConfig {
                 // Restrict access to admin and user pages based on roles
                 authorize.requestMatchers("/admin/**").hasRole("ADMIN");
                 authorize.requestMatchers("/user/**").hasRole("USER");
+//                authorize.requestMatchers("/user/**").permitAll();
                 // All other requests require authentication
                 authorize.anyRequest().authenticated();
             }

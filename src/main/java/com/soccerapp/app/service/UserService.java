@@ -17,11 +17,13 @@ public interface UserService {
 
     UserDto findUserById(Long id);
 
-    void updateUser(UserDto userDto);
+    public void updateUser(Long id, UserDto userDto);
 
     public void updateUserFields(UserDto userDto);
 
-    public void updatePasswords();
+//    public void updatePasswords();
 
     public void toggleFname(String currentName, String newName);
+
+    public User mapToUser(UserDto user);
 }

@@ -1,199 +1,330 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User and Player Profile</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+  <meta name="author" content="AdminKit">
+  <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="shortcut icon" th:href="@{/img/icons/icon-48x48.png}" />
+
+  <link rel="canonical" th:href="@{/pages-profile}" />
+
+  <title th:text="${pageTitle}">Profile | AdminKit Demo</title>
+
+  <link th:href="@{/css/app.css}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<style>
-  div{
-    /*border: 1px solid red;*/
-  }
-  .top-right-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-  }
-</style>
+
 <body>
-
-<!-- View Requests Button in the Top-Right Corner -->
-<div class="top-right-button">
-  <a href="/requests" class="btn btn-info">View Requests</a>
-</div>
-
-<!-- View All Teams Button -->
-<div class="container mt-5 text-center">
-  <a href="player/view/teams" class="btn btn-primary mb-4">View All Teams</a>
-</div>
-
-<div class="container mt-5">
-  <div class="card">
-    <div class="card-header text-center bg-primary text-white">
-      <h2>User and Player Profile</h2>
-    </div>
-    <div class="card-body">
-
-      <!-- User Information -->
-      <div class="row mb-4">
-        <div class="col-md-12">
-          <h4>User Information</h4>
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th>ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email</th>
-              <th>Account Created</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td th:text="${user.id}"></td>
-              <td th:text="${user.fname}"></td>
-              <td th:text="${user.lname}"></td>
-              <td th:text="${user.email}"></td>
-              <td th:text="${formattedCreatedAt}"></td>
-            </tr>
-            </tbody>
-          </table>
+<div class="wrapper">
+  <!--   Sidebar Nav Bar -->
+  <nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+      <div class="logo-container ">
+        <div class="logo-text ">
+          <span class="pro">Pro</span><span class="play">Play</span>
         </div>
       </div>
 
-      <!-- Player Information -->
-      <div class="row">
-        <div class="col-md-12">
-          <h4>Player Information</h4>
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th>ID</th>
-              <th>Position</th>
-              <th>Team</th>
-              <th>Skill Level</th>
-              <th>Availability</th>
-              <th>Player Bio</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Check if players are empty and display message or list -->
-            <tr th:if="${players.isEmpty()}">
-              <td colspan="6" class="text-center">
-                <a href="/player/profile/create" class="btn btn-primary">Create a Player Profile</a>
-              </td>
-            </tr>
-            <tr th:each="player : ${players}">
-              <td th:text="${player.id}"></td>
-              <td th:text="${player.position}"></td>
-              <td th:text="${player.team != null ? player.team.teamName : 'No Team'}"></td>
-              <td th:text="${player.skillLevel}"></td>
-              <td th:text="${player.availability}"></td>
-              <td th:text="${player.playerBio != null ? player.playerBio : 'No Bio'}"></td>
-            </tr>
-            </tbody>
-          </table>
+      <ul class="sidebar-nav">
+        <li class="sidebar-header">Pages</li>
 
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/profile}">
+            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+          </a>
+        </li>
 
-        </div>
-      </div>
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/match/join/friendly/list}">
+            <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Friendly Match</span>
+          </a>
+        </li>
 
-      <!-- Loop through each team -->
-      <!-- Teams Section -->
-      <div th:if="${teams != null and teams.size() > 0}">
-        <h4>Teams</h4>
-        <div th:each="team : ${teams}">
-          <div class="card mb-4">
-            <div class="card-header">
-              <h5 th:text="${team.teamName}">Team Name</h5>
-            </div>
-            <div class="card-body">
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/player/view/teams}">
+            <i class="align-middle" data-feather="book"></i> <span class="align-middle">View Teams</span>
+          </a>
+        </li>
 
-              <!-- Team Logo and Information -->
-              <div class="text-center mb-4">
-                <img th:src="${team.teamLogo != null ? team.teamLogo : 'default-logo.jpg'}"
-                     alt="Team Logo" class="img-fluid" style="max-height: 150px;">
-              </div>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                  <strong>Location:</strong> <span th:text="${team.teamLocation}">Team Location</span>
-                </li>
-                <li class="list-group-item">
-                  <strong>Created At:</strong> <span th:text="${#dates.format(team.createdAt, 'yyyy-MM-dd HH:mm')}">Creation Date</span>
-                </li>
-                <li class="list-group-item">
-                  <strong>Description:</strong> <span th:text="${team.teamDesc != null ? team.teamDesc : 'No Description'}">Team Description</span>
-                </li>
-              </ul>
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/team/management}">
+            <i class="align-middle" data-feather="book"></i> <span class="align-middle">Team Management</span>
+          </a>
+        </li>
 
-              <!-- Leadership Information -->
-              <div class="mt-4">
-                <h6>Leadership</h6>
-                <ul class="list-group">
-                  <li class="list-group-item">
-                    <strong>Captain:</strong>
-                    <span th:text="${team.teamCaptain != null ? team.teamCaptain.user.fname + ' ' + team.teamCaptain.user.lname : 'No Captain Assigned'}">Captain Name</span>
-                  </li>
-                  <li class="list-group-item">
-                    <strong>Vice-Captain:</strong>
-                    <span th:text="${team.teamVice != null ? team.teamVice.user.fname + ' ' + team.teamVice.user.lname : 'No Vice-Captain Assigned'}">Vice-Captain Name</span>
-                  </li>
-                </ul>
-              </div>
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/subscription-history}">
+            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Suscription</span>
+          </a>
+        </li>
 
-              <!-- Players List -->
-              <div class="mt-4">
-                <h6>Players</h6>
-                <ul class="list-group">
-                  <li class="list-group-item" th:each="player : ${team.players}">
-                    <span th:text="${player.user.fname + ' ' + player.user.lname}">Player Name</span> -
-                    <span th:text="${player.position}">Position</span>
-                  </li>
-                </ul>
+        <li class="sidebar-header">Tools & Components</li>
 
-                <!-- Button to go to the Player Requests Page -->
-                <div class="text-center mt-3">
-                  <a th:href="@{/player/requests/{teamId}(teamId=${team.teamId})}" class="btn btn-warning">View Player Requests</a>
-                </div>
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/competition-hub}">
+            <i class="align-middle" data-feather="square"></i> <span class="align-middle">Competition Hub</span>
+          </a>
+        </li>
 
-                <!-- Add Player Button -->
-                <div class="text-center mt-3">
-                  <a th:href="@{/team/{teamId}/players(teamId=${team.teamId})}" class="btn btn-secondary">Add Player</a>
-                </div>
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/competition-hub}">
+            <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">ProPlay Cup</span>
+          </a>
+        </li>
+      </ul>
 
-              </div>
-            </div>
+      <div class="sidebar-cta">
+        <div class="sidebar-cta-content">
+          <strong class="d-inline-block mb-2">Upgrade to Pro</strong>
+          <div class="mb-3 text-sm">
+            Are you looking for more components? Check out our premium version.
+          </div>
+          <div class="d-grid">
+            <a th:href="@{/subscription/plans}" class="btn btn-primary">Upgrade to Pro</a>
           </div>
         </div>
       </div>
-
-
-      <!-- Show message if no teams are available -->
-      <div th:if="${teams == null or teams.size() == 0}">
-        <p></p>
-        <a href="/team/create" class="btn btn-primary">Create New Team</a>
-      </div>
-
     </div>
+  </nav>
+
+
+
+
+
+
+  <!-- Main Content -->
+  <div class="main">
+    <!-- header Nav bar-->
+    <nav class="navbar navbar-expand navbar-light navbar-bg">
+      <a class="sidebar-toggle js-sidebar-toggle">
+        <i class="hamburger align-self-center"></i>
+      </a>
+
+      <div class="navbar-collapse collapse">
+        <ul class="navbar-nav navbar-align">
+          <!-- Notifications Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+              <div class="position-relative">
+                <i class="align-middle" data-feather="bell"></i>
+                <span class="indicator" th:text="${notificationsCount}">4</span>
+              </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+              <div class="dropdown-menu-header" th:text="${notificationsCount} + ' New Notifications'">4 New Notifications</div>
+              <div class="list-group">
+                <a th:each="notification : ${notifications}" href="#" class="list-group-item">
+                  <div class="row g-0 align-items-center">
+                    <div class="col-2">
+                      <i th:classappend="' ' + ${notification.iconClass}" class="text-danger" data-feather="alert-circle"></i>
+                    </div>
+                    <div class="col-10">
+                      <div th:text="${notification.message}" class="text-dark">Update completed</div>
+                      <div th:text="${notification.details}" class="text-muted small mt-1">Restart server 12 to complete the update.</div>
+                      <div th:text="${notification.timeAgo}" class="text-muted small mt-1">30m ago</div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="dropdown-menu-footer">
+                <a href="#" class="text-muted">Show all notifications</a>
+              </div>
+            </div>
+          </li>
+          <!-- Profile Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+              <i class="align-middle" data-feather="settings"></i>
+            </a>
+
+            <a  style="color:whitesmoke;" class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+              <!--              <img th:src="@{${user.}}" class="avatar img-fluid rounded me-1" alt="Charles Hall" />-->
+              <span style="color:whitesmoke; " th:text="${user.fname} + ' ' + ${user.lname}" class="">Charles Hall</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end">
+              <a class="dropdown-item" th:href="@{/pages-profile}" href="pages-profile.html">
+                <i class="align-middle me-1" data-feather="user"></i> Profile
+              </a>
+              <a class="dropdown-item" href="#">
+                <i class="align-middle me-1" data-feather="pie-chart"></i> Analytics
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="index.html">
+                <i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy
+              </a>
+              <a class="dropdown-item" href="#">
+                <i class="align-middle me-1" data-feather="help-circle"></i> Help Center
+              </a>
+              <div class="dropdown-divider"></div>
+              <form th:action="@{/logout}" method="post">
+                <!--                <button type="submit" class="btn btn-danger">Log out</button>-->
+                <a class="dropdown-item" href="/logout">Log out</a>
+              </form>
+              <!--              <a class="dropdown-item" href="#">Log out</a>-->
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
+
+
+
+
+    <main class="content">
+
+      <div class="mb-3 d-block ">
+        <h2 class="  text-white ms-2" th:text="'Hello, ' + ${user.fname} +'.'"></h2>
+      </div>
+      <div class="container-fluid p-0  d-flex justify-content-center align-items-center">
+
+
+        <!-- Profile Details Card -->
+
+          <div class="col-md-8 col-xl-9 ">
+            <div th:if="${successMessage}" class="alert alert-success text-center" role="alert">
+              <span th:text="${successMessage}"></span>
+            </div>
+
+
+            <div th:if="${!players.isEmpty()}">
+              <div style="background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent); border-radius: 4px;" class="card">
+                <div class="card-header d-flex justify-content-between align-items-center" style="background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent);">
+                  <h5 class="card-title mb-0">Player Profile Details</h5>
+                  <!-- Button on the right side -->
+                  <a th:href="@{/requests}" class="btn btn-outline-primary btn-sm">View Requests</a>
+                </div>
+
+                <div class="card-body h-100">
+                  <div class="d-flex align-items-start">
+                    <div class="flex-grow-1">
+                      <!-- Information for profile input -->
+                      <div class="card-body row">
+                        <div class="col">
+                          <h5 style="font-size: 13px; color:whitesmoke; " class="card-title mb-0">Fullname:</h5>
+                          <input style="color:whitesmoke; margin-top: 10px; background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent);" class="form-control " type="text" th:value="${user.fname + ' ' + user.lname}" readonly>
+
+                        </div>
+
+                        <div class="col">
+                          <h5 style="font-size: 13px; color:whitesmoke; " class="card-title mb-0">Location:</h5>
+                          <input style="color:whitesmoke; margin-top: 10px; background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent);" class="form-control " type="text" th:value="${user.location}" readonly>
+                        </div>
+                      </div>
+                      <div class="card-body row">
+                        <div class="col">
+                          <h5 style="font-size: 13px; color:whitesmoke; " class="card-title mb-0">Player Position:</h5>
+                          <input style="color:whitesmoke; margin-top: 10px; background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent);" class="form-control " type="text" th:value="${players[0].position}" readonly>
+                        </div>
+                        <div class="col">
+                          <h5 style="font-size: 13px;color:whitesmoke; " class="card-title mb-0">Player Team:</h5>
+                          <input style="color:whitesmoke; margin-top: 10px; background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent);" class="form-control" type="text" th:value="${players[0].team != null ? players[0].team.teamName : 'No Team'}" readonly>
+                        </div>
+                      </div>
+
+                      <div class="card-body row">
+                        <div class="col">
+                          <h5 style="font-size: 13px; color:whitesmoke; " class="card-title mb-0">Skill Level:</h5>
+                          <input style="color:whitesmoke; margin-top: 10px ;background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent);" class="form-control" type="text" th:value="${players[0].skillLevel}" readonly>
+                        </div>
+                        <div class="col">
+                          <h5 style="font-size: 13px; color:whitesmoke; " class="card-title mb-0">Gender:</h5>
+                          <input style="color:whitesmoke; margin-top: 10px;background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent);" class="form-control" type="text" th:value="${user.sex}" readonly>
+                        </div>
+                      </div>
+
+                      <div class="card-body row">
+                        <div class="col">
+                          <h5 style="font-size: 13px; color:whitesmoke; " class="card-title mb-0">Availability (Each day separated by comma):</h5>
+                          <input style="color:whitesmoke; margin-top: 10px; background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent);" class="form-control" type="text" th:value="${players[0].availability}" readonly>
+                        </div>
+                      </div>
+
+                      <hr />
+                      <div class="d-grid">
+                        <a th:href="@{/update/user/{id} (id=${user.id})}" class="btn btn-primary">Edit Profile</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr />
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- Check if player is empty -->
+            <div th:if="${players.isEmpty()}">
+              <div style="background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent); border-radius: 4px;" class="card">
+                <div class="card-header d-flex justify-content-between align-items-center" style="background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent);">
+                  <h5 class="card-title mb-0"> Profile Details</h5>
+                  <!-- Button on the right side -->
+                  <a th:href="@{/player/profile/create}" class="btn btn-outline-primary btn-sm">Create Player Profile</a>
+                </div>
+
+                <div class="card-body h-100">
+                  <div class="d-flex align-items-start">
+                    <div class="flex-grow-1">
+                      <!-- Information for profile input -->
+                      <div class="card-body row">
+                        <div class="col">
+                          <h5 style="font-size: 13px; color:whitesmoke; " class="card-title mb-0">Fullname:</h5>
+                          <input style="color:whitesmoke; margin-top: 10px; background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent);" class="form-control " type="text" th:value="${user.fname + ' ' + user.lname}" readonly>
+
+                        </div>
+
+                        <div class="col">
+                          <h5 style="font-size: 13px; color:whitesmoke; " class="card-title mb-0">Location:</h5>
+                          <input style="color:whitesmoke; margin-top: 10px; background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent);" class="form-control " type="text" th:value="${user.location}" readonly>
+                        </div>
+                      </div>
+
+                      <div class="card-body row">
+                        <div class="col">
+                          <h5 style="font-size: 13px; color:whitesmoke; " class="card-title mb-0">Gender:</h5>
+                          <input style="color:whitesmoke; margin-top: 10px;background: linear-gradient(90deg, rgba(59,125,221,.1), rgba(59,125,221,.0875) 50%, transparent);" class="form-control" type="text" th:value="${user.sex}" readonly>
+                        </div>
+                      </div>
+
+                      <hr />
+                      <div class="d-grid">
+                        <a th:href="@{/update/user/{id} (id=${user.id})}" class="btn btn-primary">Edit Profile</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr />
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </main>
   </div>
-
-  <!-- Show 'Create New Team' button if no team is available -->
-  <div th:if="${team == null || team.players.isEmpty()}" class="text-center mt-4">
-    <a href="/team/create" class="btn btn-primary">Create New Team</a>
-  </div>
-
-  <!-- Logout Button -->
-  <div class="text-center mt-4">
-    <form th:action="@{/logout}" method="post">
-      <button type="submit" class="btn btn-danger">Logout</button>
-    </form>
-  </div>
-
 </div>
-</div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<script th:src="@{/js/app.js}"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+<script>
+  feather.replace()
+</script>
+
 </html>

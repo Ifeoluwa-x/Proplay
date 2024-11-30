@@ -30,24 +30,6 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void updatePasswords() {
-        // Assume this method retrieves all users
-        List<com.soccerapp.app.models.User> users = userRepository.findAll();
-
-        for (com.soccerapp.app.models.User user : users) {
-            // For this example, we're assuming you have a way to get the plain text password.
-            // In reality, you would need to gather these securely.
-            String plainTextPassword = user.getPassword(); // Modify this as needed
-
-            // Encode the password
-            String encodedPassword = passwordEncoder.encode(plainTextPassword);
-            user.setPassword(encodedPassword); // Set the encoded password
-
-            // Save the user back to the database
-            userRepository.save(user);
-            userRepository.flush(); // Forces Hibernate to execute the insert immediately
-        }
-    }
 
     public UserDto createUser(UserDto userDto) {
         // Convert UserDto to User entity
@@ -89,16 +71,26 @@ public class UserServiceImpl implements UserService {
 
 
     public UserDto findUserById(Long id) {
-        User user = userRepository.findById(id).
-                orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return mapToUserDto(user);
     }
 
 
-    public void updateUser(UserDto userDto) {
-        User user = mapToUser(userDto);
-        userRepository.save(user);
 
+    // Update user information
+    public void updateUser(Long id, UserDto userDto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + id));
+
+        // Update fields
+        user.setFname(userDto.getFname());
+        user.setLname(userDto.getLname());
+        user.setAge(userDto.getAge());
+        user.setSex(userDto.getSex());
+        user.setLocation(userDto.getLocation());
+
+        userRepository.save(user);
     }
 
     @Transactional
@@ -122,7 +114,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-    private User mapToUser(UserDto user) {
+    public User mapToUser(UserDto user) {
         User userDto = User.builder()
                 .id(user.getId())
                 .fname(user.getFname())

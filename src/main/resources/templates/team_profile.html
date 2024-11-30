@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+  <meta name="author" content="AdminKit">
+  <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="shortcut icon" th:href="@{/img/icons/icon-48x48.png}" />
+
+  <link rel="canonical" th:href="@{/pages-profile}" />
+
+  <title th:text="${pageTitle}">Profile | AdminKit Demo</title>
+
+  <link th:href="@{/css/app.css}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<div class="wrapper">
+  <!--   Sidebar Nav Bar -->
+  <nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+      <div class="logo-container ">
+        <div class="logo-text ">
+          <span class="pro">Pro</span><span class="play">Play</span>
+        </div>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li class="sidebar-header">Pages</li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/profile}">
+            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/match/join/friendly/list}">
+            <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Friendly Match</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/player/view/teams}">
+            <i class="align-middle" data-feather="book"></i> <span class="align-middle">View Teams</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/team/management}">
+            <i class="align-middle" data-feather="book"></i> <span class="align-middle">Team Management</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/subscription-history}">
+            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Suscription</span>
+          </a>
+        </li>
+
+        <li class="sidebar-header">Tools & Components</li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/competition-hub}">
+            <i class="align-middle" data-feather="square"></i> <span class="align-middle">Competition Hub</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" th:href="@{/competition-hub}">
+            <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">ProPlay Cup</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-cta">
+        <div class="sidebar-cta-content">
+          <strong class="d-inline-block mb-2">Upgrade to Pro</strong>
+          <div class="mb-3 text-sm">
+            Are you looking for more components? Check out our premium version.
+          </div>
+          <div class="d-grid">
+            <a th:href="@{/subscription/plans}" class="btn btn-primary">Upgrade to Pro</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+
+
+
+
+  <!-- Main Content -->
+  <div class="main">
+    <!-- header Nav bar-->
+    <nav class="navbar navbar-expand navbar-light navbar-bg">
+      <a class="sidebar-toggle js-sidebar-toggle">
+        <i class="hamburger align-self-center"></i>
+      </a>
+
+      <div class="navbar-collapse collapse">
+        <ul class="navbar-nav navbar-align">
+          <!-- Notifications Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+              <div class="position-relative">
+                <i class="align-middle" data-feather="bell"></i>
+                <span class="indicator" th:text="${notificationsCount}">4</span>
+              </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+              <div class="dropdown-menu-header" th:text="${notificationsCount} + ' New Notifications'">4 New Notifications</div>
+              <div class="list-group">
+                <a th:each="notification : ${notifications}" href="#" class="list-group-item">
+                  <div class="row g-0 align-items-center">
+                    <div class="col-2">
+                      <i th:classappend="' ' + ${notification.iconClass}" class="text-danger" data-feather="alert-circle"></i>
+                    </div>
+                    <div class="col-10">
+                      <div th:text="${notification.message}" class="text-dark">Update completed</div>
+                      <div th:text="${notification.details}" class="text-muted small mt-1">Restart server 12 to complete the update.</div>
+                      <div th:text="${notification.timeAgo}" class="text-muted small mt-1">30m ago</div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="dropdown-menu-footer">
+                <a href="#" class="text-muted">Show all notifications</a>
+              </div>
+            </div>
+          </li>
+          <!-- Profile Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+              <i class="align-middle" data-feather="settings"></i>
+            </a>
+
+            <a  style="color:whitesmoke;" class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+              <!--              <img th:src="@{${user.}}" class="avatar img-fluid rounded me-1" alt="Charles Hall" />-->
+              <span style="color:whitesmoke; " th:text="${user.fname} + ' ' + ${user.lname}" class="">Charles Hall</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end">
+              <a class="dropdown-item" th:href="@{/pages-profile}" href="pages-profile.html">
+                <i class="align-middle me-1" data-feather="user"></i> Profile
+              </a>
+              <a class="dropdown-item" href="#">
+                <i class="align-middle me-1" data-feather="pie-chart"></i> Analytics
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="index.html">
+                <i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy
+              </a>
+              <a class="dropdown-item" href="#">
+                <i class="align-middle me-1" data-feather="help-circle"></i> Help Center
+              </a>
+              <div class="dropdown-divider"></div>
+              <form th:action="@{/logout}" method="post">
+                <!--                <button type="submit" class="btn btn-danger">Log out</button>-->
+                <a class="dropdown-item" href="/logout">Log out</a>
+              </form>
+              <!--              <a class="dropdown-item" href="#">Log out</a>-->
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
+
+    <main class="content">
+
+      <div class="mb-3 d-block ">
+        <h2 class="  text-white ms-2" th:text="'Hello, ' + ${user.fname} +'.'"></h2>
+      </div>
+      <div class="container-fluid p-0  d-flex justify-content-center align-items-center">
+        <!-- Teams Section -->
+        <div class="container mt-5">
+          <!-- Team Info Card -->
+          <div class="card" style="border-radius: 15px; background-color: #212E3C;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-bottom: 20px; position: relative;">
+            <!-- Button in the top-right corner (Create Friendly Match) -->
+            <a th:href="@{/match/team/list/{teamId}(teamId=${teamId})}" class="btn btn-success"
+               style="position: absolute; top: 15px; right: 15px; z-index: 1;">Create Friendly Match +</a>
+
+            <!-- New Button Right beside the existing one -->
+            <a th:href="@{/team/match/Requests/{teamId} (teamId=${teamId})}" class="btn btn-success"
+               style="position: absolute; top: 15px; right: 230px; z-index: 1;">View Friendly Requests</a>
+
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img th:src="@{${team.teamLogo}}" class="card-img" alt="Team Logo" style="max-width: 100%; height: auto; border-radius: 15px;">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body whitecolortext">
+                  <h5 style="font-size: 1.1rem;" class="card-title whitecolortext" th:text="${team.teamName}">Team Name</h5>
+                  <p style="font-size: 1.1rem;" class="card-text"><strong></strong> <span th:text="${team.teamLocation}">Team Location</span></p>
+                  <p style="font-size: 1.1rem;" th:text="${team.teamDesc}">Team Description</p>
+                  <h6 class="whitecolortext" style="font-size: 1.1rem;">Players (Total: <span th:text="${#lists.size(team.players)}"></span>)</h6>
+
+                  <h6 class="whitecolortext">Players:</h6>
+                  <div class="table-responsive">
+                    <table class="table table-striped whitecolortext">
+                      <thead>
+                      <tr>
+                        <th>Player</th>
+                        <th>Position</th>
+                        <th>Skill Level</th>
+                        <th>Bio</th>
+                        <th>Actions</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr th:each="player : ${team.players}">
+                        <td th:text="${player.user.fname} + ' ' + ${player.user.lname}"></td>
+                        <td th:text="${player.position}"></td>
+                        <td th:text="${player.skillLevel}"></td>
+                        <td th:text="${player.playerBio}"></td>
+                        <td>
+                          <a th:href="@{/removePlayer/{playerId}(playerId=${player.id})}" class="btn btn-danger" style="margin-top: 5px;">Remove</a>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="mt-3">
+                    <a th:href="@{/team/{teamId}/players (teamId=${team.teamId})}" class="btn btn-primary">Add Players</a>
+
+                    <!-- Button in the top-right corner (View Player Requests) -->
+                    <a th:href="@{/player/requests/{teamId} (teamId=${team.teamId})}" class="btn btn-secondary" style="margin-left: 10px;">View Player Requests</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+<script th:src="@{/js/app.js}"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+<script>
+  // feather.replace()
+</script>
+
+</html>
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>Team Information</title>-->
+<!--  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--  <style>-->
+<!--    .team-logo {-->
+<!--      max-width: 200px;-->
+<!--      height: auto;-->
+<!--      border-radius: 10px;-->
+<!--    }-->
+<!--    .team-info {-->
+<!--      background-color: #f8f9fa;-->
+<!--      padding: 20px;-->
+<!--      border-radius: 10px;-->
+<!--      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);-->
+<!--    }-->
+<!--    .player-card {-->
+<!--      background-color: #e9ecef;-->
+<!--      padding: 15px;-->
+<!--      border-radius: 10px;-->
+<!--      margin-bottom: 15px;-->
+<!--      height: 100%;-->
+<!--    }-->
+<!--    .player-card h5 {-->
+<!--      font-size: 1.2rem;-->
+<!--    }-->
+<!--    .team-header {-->
+<!--      margin-bottom: 30px;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container my-5">-->
+<!--  &lt;!&ndash; Team Info Section &ndash;&gt;-->
+<!--  <div class="row team-header">-->
+<!--    <div class="col-md-4 text-center">-->
+<!--      <img th:src="@{${team.teamLogo}}" alt="Team Logo" class="team-logo" />-->
+<!--    </div>-->
+<!--    <div class="col-md-8">-->
+<!--      <div class="team-info">-->
+<!--        <h2 class="display-4" th:text="${team.teamName}"></h2>-->
+<!--        <p><strong>Location:</strong> <span th:text="${team.teamLocation}"></span></p>-->
+<!--        <p><strong>Description:</strong> <span th:text="${team.teamDesc}"></span></p>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Players Section &ndash;&gt;-->
+<!--  <div class="my-4">-->
+<!--    <h3 class="mb-3">Players</h3>-->
+<!--    <div class="row">-->
+<!--      <div class="col-md-4" th:each="player : ${team.players}">-->
+<!--        <div class="player-card">-->
+<!--          <h5 th:text="${player.user.fname} + ' ' + ${player.user.lname}"></h5>-->
+<!--          <p><strong>Position:</strong> <span th:text="${player.position}"></span></p>-->
+<!--          <p><strong>Skill Level:</strong> <span th:text="${player.skillLevel}"></span></p>-->
+<!--          <p><strong>Bio:</strong> <span th:text="${player.playerBio}"></span></p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>Team Info</title>-->
+<!--  &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
+<!--  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container mt-5">-->
+<!--  &lt;!&ndash; Team Info Card &ndash;&gt;-->
+<!--  <div class="card" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-bottom: 20px; position: relative;">-->
+<!--    &lt;!&ndash; Button in the top-right corner (Create Friendly Match) &ndash;&gt;-->
+<!--    <a th:href="@{/createFriendlyMatch/{teamId}(teamId=${team.teamId})}" class="btn btn-success"-->
+<!--       style="position: absolute; top: 15px; right: 15px; z-index: 1;">Create Friendly Match +</a>-->
+
+<!--    <div class="row no-gutters">-->
+<!--      <div class="col-md-4">-->
+<!--        <img th:src="@{${team.teamLogo}}" class="card-img" alt="Team Logo" style="max-width: 100%; height: auto; border-radius: 15px;">-->
+<!--      </div>-->
+<!--      <div class="col-md-8">-->
+<!--        <div class="card-body">-->
+<!--          <h5 class="card-title" th:text="${team.teamName}">Team Name</h5>-->
+<!--          <p class="card-text"><strong>Location:</strong> <span th:text="${team.teamLocation}">Team Location</span></p>-->
+<!--          <p style="font-size: 1.1rem; color: #555;" th:text="${team.teamDesc}">Team Description</p>-->
+
+<!--          <h6>Players:</h6>-->
+<!--          <div class="table-responsive">-->
+<!--            <table class="table table-striped">-->
+<!--              <thead>-->
+<!--              <tr>-->
+<!--                <th>Name</th>-->
+<!--                <th>Position</th>-->
+<!--                <th>Skill Level</th>-->
+<!--                <th>Bio</th>-->
+<!--                <th>Actions</th>-->
+<!--              </tr>-->
+<!--              </thead>-->
+<!--              <tbody>-->
+<!--              <tr th:each="player : ${team.players}">-->
+<!--                <td th:text="${player.user.fname} + ' ' + ${player.user.lname}"></td>-->
+<!--                <td th:text="${player.position}"></td>-->
+<!--                <td th:text="${player.skillLevel}"></td>-->
+<!--                <td th:text="${player.playerBio}"></td>-->
+<!--                <td>-->
+<!--                  <a th:href="@{/removePlayer/{playerId}(playerId=${player.id})}" class="btn btn-danger" style="margin-top: 5px;">Remove</a>-->
+<!--                </td>-->
+<!--              </tr>-->
+<!--              </tbody>-->
+<!--            </table>-->
+<!--          </div>-->
+
+<!--          <div class="mt-3">-->
+<!--            <a th:href="@{/addPlayer/{teamId}(teamId=${team.teamId})}" class="btn btn-primary">Add Players</a>-->
+
+<!--            &lt;!&ndash; Button in the top-right corner (View Player Requests) &ndash;&gt;-->
+<!--            <a th:href="@{/viewPlayerRequests/{teamId}(teamId=${team.teamId})}" class="btn btn-secondary" style="margin-left: 10px;">View Player Requests</a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Bootstrap JS and dependencies &ndash;&gt;-->
+<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>-->
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
+<!--</body>-->
+<!--</html>-->

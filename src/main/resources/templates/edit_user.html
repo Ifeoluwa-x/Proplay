@@ -1,39 +1,268 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit User</title>
-    <!-- Bootstrap CSS -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+    <meta name="author" content="AdminKit">
+    <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" th:href="@{/img/icons/icon-48x48.png}" />
+
+    <link rel="canonical" th:href="@{/pages-profile}" />
+
+    <title th:text="${pageTitle}">Profile | AdminKit Demo</title>
+
+    <link th:href="@{/css/app.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
-<div class="container mt-5">
-    <h2 class="mb-4">Edit User</h2>
+<div class="wrapper">
+    <!--   Sidebar Nav Bar -->
+    <nav id="sidebar" class="sidebar js-sidebar">
+        <div class="sidebar-content js-simplebar">
+            <div class="logo-container ">
+                <div class="logo-text ">
+                    <span class="pro">Pro</span><span class="play">Play</span>
+                </div>
+            </div>
 
+            <ul class="sidebar-nav">
+                <li class="sidebar-header">Pages</li>
 
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/profile}">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+                    </a>
+                </li>
 
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/match/join/friendly/list}">
+                        <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Friendly Match</span>
+                    </a>
+                </li>
 
-    <form th:action="@{/update/user/{id}(id=${user.id})}" th:object="${user}" method="post">
-        <div class="form-group">
-            <label for="position">Position:</label>
-            <input type="text" id="position" name="position" th:field="*{position}" class="form-control">
-            <p th:if="${#fields.hasErrors('position')}" class="text-danger" th:errors="*{position}"></p>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/player/view/teams}">
+                        <i class="align-middle" data-feather="book"></i> <span class="align-middle">View Teams</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/team/management}">
+                        <i class="align-middle" data-feather="book"></i> <span class="align-middle">Team Management</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/subscription-history}">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Suscription</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-header">Tools & Components</li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/competition-hub}">
+                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Competition Hub</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/competition-hub}">
+                        <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">ProPlay Cup</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-cta">
+                <div class="sidebar-cta-content">
+                    <strong class="d-inline-block mb-2">Upgrade to Pro</strong>
+                    <div class="mb-3 text-sm">
+                        Are you looking for more components? Check out our premium version.
+                    </div>
+                    <div class="d-grid">
+                        <a th:href="@{/subscription/plans}" class="btn btn-primary">Upgrade to Pro</a>
+                    </div>
+                </div>
+            </div>
         </div>
+    </nav>
 
-        <div class="form-group">
-            <label for="location">Location:</label>
-            <input type="text" id="location" name="location" th:field="*{location}" class="form-control">
-            <p th:if="${#fields.hasErrors('location')}" class="text-danger" th:errors="*{location}"></p>
-        </div>
 
-        <button type="submit" class="btn btn-primary">Update User</button>
-    </form>
+
+
+
+
+    <!-- Main Content -->
+    <div class="main">
+        <!-- header Nav bar-->
+        <nav class="navbar navbar-expand navbar-light navbar-bg">
+            <a class="sidebar-toggle js-sidebar-toggle">
+                <i class="hamburger align-self-center"></i>
+            </a>
+
+            <div class="navbar-collapse collapse">
+                <ul class="navbar-nav navbar-align">
+                    <!-- Notifications Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+                            <div class="position-relative">
+                                <i class="align-middle" data-feather="bell"></i>
+                                <span class="indicator" th:text="${notificationsCount}">4</span>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+                            <div class="dropdown-menu-header" th:text="${notificationsCount} + ' New Notifications'">4 New Notifications</div>
+                            <div class="list-group">
+                                <a th:each="notification : ${notifications}" href="#" class="list-group-item">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-2">
+                                            <i th:classappend="' ' + ${notification.iconClass}" class="text-danger" data-feather="alert-circle"></i>
+                                        </div>
+                                        <div class="col-10">
+                                            <div th:text="${notification.message}" class="text-dark">Update completed</div>
+                                            <div th:text="${notification.details}" class="text-muted small mt-1">Restart server 12 to complete the update.</div>
+                                            <div th:text="${notification.timeAgo}" class="text-muted small mt-1">30m ago</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="dropdown-menu-footer">
+                                <a href="#" class="text-muted">Show all notifications</a>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- Profile Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+                            <i class="align-middle" data-feather="settings"></i>
+                        </a>
+
+                        <a  style="color:whitesmoke;" class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+                            <!--              <img th:src="@{${user.}}" class="avatar img-fluid rounded me-1" alt="Charles Hall" />-->
+                            <span style="color:whitesmoke; " th:text="${user.fname} + ' ' + ${user.lname}" class="">Charles Hall</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" th:href="@{/pages-profile}" href="pages-profile.html">
+                                <i class="align-middle me-1" data-feather="user"></i> Profile
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="align-middle me-1" data-feather="pie-chart"></i> Analytics
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="index.html">
+                                <i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="align-middle me-1" data-feather="help-circle"></i> Help Center
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <form th:action="@{/logout}" method="post">
+                                <!--                <button type="submit" class="btn btn-danger">Log out</button>-->
+                                <a class="dropdown-item" href="/logout">Log out</a>
+                            </form>
+                            <!--              <a class="dropdown-item" href="#">Log out</a>-->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+
+        <main class="content">
+
+            <div class="mb-3 d-block ">
+                <h2 class="  text-white ms-2" th:text="'Hello, ' + ${user.fname} +'.'"></h2>
+            </div>
+            <div>
+                <div class=" container-fluid p-0  d-flex justify-content-center align-items-center" >
+                    <div class="row  container-fluid" style="justify-self: center">
+                        <!-- First Column (50% width) -->
+                        <div class="col-12 col-md-6 col-lg-6  container-fluid">
+                            <div class="card backgroundColor cardBorder w-100">
+                                <div class="form-container backgroundColor" style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                                    <h2 class="mb-4 whitecolortext">Edit User Profile</h2>
+                                    <form th:action="@{/update/{id}(id=${user.id})}" th:object="${user}" method="post" class="whitecolortext">
+                                        <!-- First Name Field -->
+                                        <div class="form-group ">
+                                            <label for="fname">First Name:</label>
+                                            <input type="text" id="fname" name="fname" th:field="*{fname}" class="form-control custom-input whitecolortext backgroundColor" required>
+                                            <p th:if="${#fields.hasErrors('fname')}" class="text-danger" th:errors="*{fname}"></p>
+                                        </div>
+
+                                        <!-- Last Name Field -->
+                                        <div class="form-group">
+                                            <label for="lname">Last Name:</label>
+                                            <input type="text" id="lname" name="lname" th:field="*{lname}" class="form-control custom-input whitecolortext backgroundColor" required>
+                                            <p th:if="${#fields.hasErrors('lname')}" class="text-danger" th:errors="*{lname}"></p>
+                                        </div>
+
+                                        <!-- Age Field -->
+                                        <div class="form-group">
+                                            <label for="age">Age:</label>
+                                            <input type="number" id="age" name="age" th:field="*{age}" class="form-control custom-input whitecolortext backgroundColor" required>
+                                            <p th:if="${#fields.hasErrors('age')}" class="text-danger" th:errors="*{age}"></p>
+                                        </div>
+
+                                        <!-- Sex Field -->
+                                        <div class="form-group">
+                                            <label for="sex">Sex:</label>
+                                            <select id="sex" name="sex" th:field="*{sex}" class="form-control whitecolortext  custom-input backgroundColor" required>
+                                                <option value="" disabled selected>Select your sex</option>
+                                                <option value="Male" th:selected="${user.sex == 'Male'}">Male</option>
+                                                <option value="Female" th:selected="${user.sex == 'Female'}">Female</option>
+                                                <option value="Other" th:selected="${user.sex == 'Other'}">Other</option>
+                                            </select>
+                                            <p th:if="${#fields.hasErrors('sex')}" class="text-danger" th:errors="*{sex}"></p>
+                                        </div>
+
+                                        <!-- Location Field -->
+                                        <div class="form-group">
+                                            <label for="location">Location:</label>
+                                            <select id="location" name="location" th:field="*{location}" class="form-control custom-input whitecolortext backgroundColor" required>
+                                                <option value="" disabled selected>Select your location</option>
+                                                <option value="Burnaby" th:selected="${user.location == 'Burnaby'}">New York</option>
+                                                <option value="Richmond" th:selected="${user.location == 'Richmond'}">Los Angeles</option>
+                                                <option value="Surrey" th:selected="${user.location == 'Surrey'}">Chicago</option>
+                                                <option value="New westminster" th:selected="${user.location == 'New westminster'}">Houston</option>
+                                                <option value="Vancouver" th:selected="${user.location == 'Vancouver'}">Miami</option>
+                                            </select>
+                                            <p th:if="${#fields.hasErrors('location')}" class="text-danger" th:errors="*{location}"></p>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update User</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+<!--            <div  th:if="${player == null}">-->
+<!--                <div class="container-fluid p-0  d-flex justify-content-center align-items-center" >-->
+<!--                    <a href="/player/profile/create" class="btn btn-primary">Create Player Profile</a>-->
+<!--                </div>-->
+<!--            </div >-->
+
+        </main>
+    </div>
 </div>
-
-<!-- Bootstrap JS and dependencies -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+<script th:src="@{/js/app.js}"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+<script>
+    feather.replace()
+</script>
+
 </html>
+
+
+

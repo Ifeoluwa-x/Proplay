@@ -17,6 +17,8 @@ public interface TeamService {
 
     public Team getTeamById(Long teamId);
 
+    List<TeamDto> getTeamsByLocation(String location);
+
     public TeamDto findByTeamId(long id);
 
     public List<TeamDto> getAllTeams();

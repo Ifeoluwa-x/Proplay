@@ -25,6 +25,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -89,11 +90,11 @@ public class UserController {
         return "profile";
     }
 
-    @GetMapping("/users/{id}")
-    public String userDetail(@PathVariable("id") Long id, Model model) {
-        UserDto user = userService.findUserById(id);
-        model.addAttribute("user", user);
-        return "users_detail";}
+//    @GetMapping("/users/{id}")
+//    public String userDetail(@PathVariable("id") Long id, Model model) {
+//        UserDto user = userService.findUserById(id);
+//        model.addAttribute("user", user);
+//        return "users_detail";}
 
     @GetMapping("/users")
     public String listUsers(Model model) {
@@ -110,25 +111,35 @@ public class UserController {
 
 
     @GetMapping("/update/user/{id}")
-    public String updateUserForm(@PathVariable("id") Long id, Model model) {
-        // Fetch the user details to edit
+    public String updateUser(@PathVariable("id") Long id, Model model,HttpSession session) {
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
         UserDto userDto = userService.findUserById(id);
         model.addAttribute("user", userDto);
         // Return the name of the Thymeleaf template (without the .html extension)
         return "edit_user";
     }
 
-    @PostMapping("/update/user/{id}")
+    // Handle form submission for updating the user
+    @PostMapping("/update/{id}")
     public String updateUser(@PathVariable("id") Long id,
-                             @Valid @ModelAttribute("user") UserDto user,
-                             BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            logger.error("Error updating user with ID {}: {}", id, bindingResult.getAllErrors());
-            return "edit_user";
-        }
-        // Update the user details
-        user.setId(id);
-        userService.updateUserFields(user);
-        return "redirect:/users";
+                             @ModelAttribute("user") UserDto userDto,
+                             RedirectAttributes redirectAttributes) {
+        userService.updateUser(id, userDto);
+        Player player = playerService.getPlayersByUserId(id).get(0);
+
+        // Add a success message as a flash attribute
+        redirectAttributes.addFlashAttribute("successMessage", "User details updated successfully!");
+
+        // Redirect to the profile page
+        return "redirect:/profile";
+    }
+
+
+    @GetMapping("/competition-hub")
+    public String compHub(Model model,HttpSession session) {
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+        // Return the name of the Thymeleaf template (without the .html extension)
+        model.addAttribute("user", loggedInUser);
+        return "comp";
     }
 }

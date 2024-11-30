@@ -69,6 +69,7 @@ public class PlayerRequestController {
         }
 //        Long teamId = team.getTeamId();
         List<PlayerRequest> requests = playerReqService.getRequestsForTeam(teamId);
+        model.addAttribute("user",loggedInUser);
         model.addAttribute("requests", requests);
         return "player_requests";  // HTML template name
     }
@@ -99,7 +100,7 @@ public class PlayerRequestController {
 
         player.setTeam(team);
         playerRepository.save(player);
-        return "redirect:/requests";  // Redirect back to the requests page
+        return "redirect:/player/requests/" + teamId;  // Redirect back to the requests page
     }
 
 

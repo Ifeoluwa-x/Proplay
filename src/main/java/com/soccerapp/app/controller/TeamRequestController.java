@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -28,7 +29,6 @@ public class TeamRequestController {
     private TeamReqService teamReqService;
     @Autowired
     private PlayerRepository playerRepository;
-
     @Autowired
     private TeamRepository teamRepository;
 
@@ -36,6 +36,7 @@ public class TeamRequestController {
     private UserService userService;
     private PlayerService playerService;
     private TeamService teamService;
+
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
@@ -70,6 +71,7 @@ public class TeamRequestController {
         }
         Long playerId = player.getId();
         List<TeamRequest> requests = teamReqService.getRequestsForPlayer(playerId);
+        model.addAttribute("user",loggedInUser );
         model.addAttribute("requests", requests);
         return "team_requests";  // HTML template name
     }
@@ -90,18 +92,30 @@ public class TeamRequestController {
 
 
     @PostMapping("/requests/accept/{id}/addPlayer/{teamId}/{playerId}")
-    public String acceptRequest(@PathVariable Long id,@PathVariable Long teamId, @PathVariable Long playerId) {
+    public String acceptRequest(
+            @PathVariable Long id,
+            @PathVariable Long teamId,
+            @PathVariable Long playerId,
+            RedirectAttributes redirectAttributes) {
+
         System.out.println("Request method: POST, URL: /requests/accept/" + id);  // Debugging
-        teamReqService.acceptRequest(id);
-        Player player = playerRepository.findById(playerId)
-                .orElseThrow(() -> new RuntimeException("Player not found"));
+
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new RuntimeException("Team not found"));
 
+        Player player = playerRepository.findById(playerId)
+                .orElseThrow(() -> new RuntimeException("Player not found"));
+
+        teamReqService.acceptRequest(id);
         player.setTeam(team);
         playerRepository.save(player);
+
+        // Add a success message to RedirectAttributes
+        redirectAttributes.addFlashAttribute("message", "Request accepted successfully, and you've been added to the team.");
+
         return "redirect:/requests";  // Redirect back to the requests page
     }
+
 
 
     // Decline team request

@@ -1,12 +1,15 @@
 package com.soccerapp.app.controller;
 
+import com.soccerapp.app.dto.MatchDto;
 import com.soccerapp.app.dto.PlayerDto;
 import com.soccerapp.app.dto.TeamDto;
 import com.soccerapp.app.dto.UserDto;
+import com.soccerapp.app.models.Match;
+import com.soccerapp.app.models.MatchTeamReq;
+import com.soccerapp.app.models.Player;
 import com.soccerapp.app.models.Team;
-import com.soccerapp.app.service.PlayerService;
-import com.soccerapp.app.service.TeamReqService;
-import com.soccerapp.app.service.TeamService;
+import com.soccerapp.app.service.*;
+import com.soccerapp.app.utils.DateUtils;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +34,19 @@ public class TeamController {
     @Autowired
     PlayerService playerService;
     TeamReqService teamReqService;
+    MatchTeamService matchTeamService;
+    UserSubscriptionService userSubscriptionService;
 
-
-    public TeamController(TeamService teamService, PlayerService playerService, TeamReqService teamReqService) {
+    public TeamController(TeamService teamService,
+                          PlayerService playerService,
+                          TeamReqService teamReqService,
+                          MatchTeamService matchTeamService,
+                          UserSubscriptionService userSubscriptionService) {
         this.teamService = teamService;
         this.playerService = playerService;
         this.teamReqService = teamReqService;
+        this.matchTeamService = matchTeamService;
+        this.userSubscriptionService = userSubscriptionService;
     }
 
     @GetMapping("/create")
@@ -80,7 +92,61 @@ public class TeamController {
         model.addAttribute("team", createdTeam);
 
         // Redirect back to the profile page
-        return "redirect:/profile";
+        return "redirect:/team/management";
+    }
+
+    @GetMapping("/management")
+    public String teamManagement(Model model, HttpSession session) {
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+        Long loggedInUserId = loggedInUser.getId();
+
+
+        boolean hasSubscription = userSubscriptionService.hasActiveSubscription(loggedInUserId);
+        List<Team> teams = teamService.getTeamByUserId(loggedInUserId);
+
+
+        // Add loggedInUser and team attributes to the model for the form
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("teams", teams);
+        model.addAttribute("hasSubscription", hasSubscription);
+
+        return "team_management"; // Make sure this matches your Thymeleaf template name
+    }
+
+    @GetMapping("/view/{userId}/{teamId}")
+    public String viewOwnTeamProfile(@PathVariable Long userId, @PathVariable Long teamId, Model model, HttpSession session) {
+        // Optionally, you can validate if the logged-in user matches the userId
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+
+        // Fetch the team associated with the logged-in user and the specified teamId
+        List<Team> teams = teamService.getTeamByUserId(userId);
+
+        // Fetch the specific team details by teamId
+        Team team = teamService.getTeamById(teamId);
+
+        // Add the user and team attributes to the model for the view
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("team", team);
+
+        // Return the team profile view
+        return "team_profile"; // Make sure this matches your Thymeleaf template name
+    }
+
+
+    @GetMapping("/view/{teamId}")
+    public String viewTeamProfile(@PathVariable Long teamId, Model model, HttpSession session) {
+        // Optionally, you can validate if the logged-in user matches the userId
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+
+        // Fetch the specific team details by teamId
+        Team team = teamService.getTeamById(teamId);
+
+        // Add the user and team attributes to the model for the view
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("team", team);
+
+        // Return the team profile view
+        return "teamProfile"; // Make sure this matches your Thymeleaf template name
     }
 
 
@@ -92,8 +158,14 @@ public class TeamController {
 
 
 
+
+
+
+
+
     @GetMapping("/{teamId}/players")
-    public String listPlayers(@PathVariable Long teamId, Model model) {
+    public String listPlayers(  HttpSession session,@PathVariable Long teamId, Model model) {
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
         List<PlayerDto> players = playerService.findPlayersNotInTeam(teamId);
 
         // Retrieve the team by ID
@@ -111,22 +183,96 @@ public class TeamController {
         }
 
         // Add team and players to the model
+        model.addAttribute("user", loggedInUser);
         model.addAttribute("team", team);
         model.addAttribute("players", players);
 
         return "players";
     }
 
-//    @GetMapping("/addPlayer/{teamId}/{playerId}")
-//    public String addPlayerToTeam(@PathVariable Long teamId, @PathVariable Long playerId) {
-//        try {
-//            playerService.addPlayerToTeam(playerId, teamId);  // Call the service method to handle the logic
-//            return "redirect:/profile";  // Redirect back to the profile page (or wherever you want)
-//        } catch (RuntimeException e) {
-//            // Handle the error (you could return an error page or show a message)
-//            return "error";
-//        }
+
+    // List all MatchTeamReq where teamId is in the awayTeam column and decision is "Pending"
+    @GetMapping("/match/Requests/{teamId}")
+    public String listPendingAwayTeamMatches(HttpSession session, @PathVariable Long teamId, Model model) {
+
+        // Optionally, you can validate if the logged-in user matches the userId
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+        // Retrieve all match team requests where the team is in the awayTeam column and decision is "Pending"
+        List<MatchTeamReq> incomingRequests = matchTeamService.findPendingAwayTeamMatches(teamId);
+
+
+        // Retrieve all match team requests where the team is in the homeTeam column and decision is "Pending" or "Declined"
+        List<MatchTeamReq> homeTeamRequests = matchTeamService.findHomeTeamMatchesByStatus(teamId, "Pending", "Declined");
+
+        // Retrieve match requests where the decision is "Accepted" and teamId is in homeTeam or awayTeam
+        List<MatchTeamReq> acceptedRequests = matchTeamService.findAcceptedMatchRequests(teamId);
+
+
+        // Format dates and calculate available spots for joined matches.
+        homeTeamRequests.forEach(matchreq -> {
+            String formattedDate = DateUtils.formatLocalDateTime(matchreq.getMatch().getMatchDate());
+            matchreq.setFormattedDate(formattedDate);
+        });
+
+        // Format dates and calculate available spots for joined matches.
+        acceptedRequests.forEach(match -> {
+            String formattedDate = DateUtils.formatLocalDateTime(match.getMatch().getMatchDate());
+            match.setFormattedDate(formattedDate);
+        });
+
+
+
+
+
+
+        // Add the teamId to the model
+        model.addAttribute("teamId", teamId);
+
+        // Add the list of pending match team requests to the model
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("incomingRequests", incomingRequests);
+        model.addAttribute("homeTeamRequests", homeTeamRequests);
+        model.addAttribute("acceptedRequests", acceptedRequests);
+
+
+        // Return the view to display the match requests
+        return "matchTeamRequests"; // Replace with your actual view name
+    }
+
+    @PostMapping("/match/request/accept/{teamId}/{matchId}/{matchReqId}")
+    public String acceptRequest(@PathVariable Long teamId,@PathVariable Long matchId,
+                                @PathVariable Long matchReqId,
+                                RedirectAttributes redirectAttributes) {
+        System.out.println("Request method: POST, URL: /requests/accept/"+ matchId + matchReqId);  // Debugging
+        matchTeamService.acceptTeamMatchRequest(matchReqId);
+
+        // Add success message to the redirect attributes
+        redirectAttributes.addFlashAttribute("successMessage", "Match request accepted successfully!");
+        return "redirect:/team/match/Requests/" + teamId;  // Redirect back to the requests page
+    }
+
+
+//    // List all MatchTeamReq where teamId is in the homeTeam column and decision is "Pending" or "Declined"
+//    @GetMapping("/match/Requests/{teamId}")
+//    public String listHomeTeamPendingAndDeclinedMatches(HttpSession session, @PathVariable Long teamId, Model model) {
+//
+//        // Optionally, you can validate if the logged-in user matches the userId
+//        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+//
+//        // Retrieve all match team requests where the team is in the homeTeam column and decision is "Pending" or "Declined"
+//        List<MatchTeamReq> homeTeamRequests = matchTeamService.findHomeTeamMatchesByStatus(teamId, "Pending", "Declined");
+//
+//        // Add the teamId to the model
+//        model.addAttribute("teamId", teamId);
+//
+//        // Add the list of match team requests to the model
+//        model.addAttribute("user", loggedInUser);
+//        model.addAttribute("homeTeamRequests", homeTeamRequests);
+//
+//        // Return the view to display the match requests
+//        return "matchTeamRequests"; // Replace with your actual view name
 //    }
+
 
 
 

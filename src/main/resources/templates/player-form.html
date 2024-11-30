@@ -1,46 +1,333 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Create Player</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+    <meta name="author" content="AdminKit">
+    <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" th:href="@{/img/icons/icon-48x48.png}" />
+
+    <link rel="canonical" th:href="@{/pages-profile}" />
+
+    <title th:text="${pageTitle}">Profile | AdminKit Demo</title>
+
+    <link th:href="@{/css/app.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
-<div class="container">
-    <h1>Create Player</h1>
+<div class="wrapper">
+    <!--   Sidebar Nav Bar -->
+    <nav id="sidebar" class="sidebar js-sidebar">
+        <div class="sidebar-content js-simplebar">
+            <div class="logo-container ">
+                <div class="logo-text ">
+                    <span class="pro">Pro</span><span class="play">Play</span>
+                </div>
+            </div>
 
-    <!-- Display logged-in user information -->
-    <div class="alert alert-info">
-        <strong>Logged in as:</strong> <span th:text="${loggedInUser.email}">Email</span><br>
-        <strong>User Id</strong> <span th:text="${loggedInUser.id}">Id</span><br>
-        <strong>Name:</strong> <span th:text="${loggedInUser.fname} + ' ' + ${loggedInUser.lname}">Full Name</span>
+            <ul class="sidebar-nav">
+                <li class="sidebar-header">Pages</li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/profile}">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/match/join/friendly/list}">
+                        <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Friendly Match</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/player/view/teams}">
+                        <i class="align-middle" data-feather="book"></i> <span class="align-middle">View Teams</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/team/management}">
+                        <i class="align-middle" data-feather="book"></i> <span class="align-middle">Team Management</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/subscription-history}">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Suscription</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-header">Tools & Components</li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/competition-hub}">
+                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Competition Hub</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/competition-hub}">
+                        <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">ProPlay Cup</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-cta">
+                <div class="sidebar-cta-content">
+                    <strong class="d-inline-block mb-2">Upgrade to Pro</strong>
+                    <div class="mb-3 text-sm">
+                        Are you looking for more components? Check out our premium version.
+                    </div>
+                    <div class="d-grid">
+                        <a th:href="@{/subscription/plans}" class="btn btn-primary">Upgrade to Pro</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+
+
+    <!-- Main Content -->
+    <div class="main">
+        <!-- header Nav bar-->
+        <nav class="navbar navbar-expand navbar-light navbar-bg">
+            <a class="sidebar-toggle js-sidebar-toggle">
+                <i class="hamburger align-self-center"></i>
+            </a>
+
+            <div class="navbar-collapse collapse">
+                <ul class="navbar-nav navbar-align">
+                    <!-- Notifications Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+                            <div class="position-relative">
+                                <i class="align-middle" data-feather="bell"></i>
+                                <span class="indicator" th:text="${notificationsCount}">4</span>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+                            <div class="dropdown-menu-header" th:text="${notificationsCount} + ' New Notifications'">4 New Notifications</div>
+                            <div class="list-group">
+                                <a th:each="notification : ${notifications}" href="#" class="list-group-item">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-2">
+                                            <i th:classappend="' ' + ${notification.iconClass}" class="text-danger" data-feather="alert-circle"></i>
+                                        </div>
+                                        <div class="col-10">
+                                            <div th:text="${notification.message}" class="text-dark">Update completed</div>
+                                            <div th:text="${notification.details}" class="text-muted small mt-1">Restart server 12 to complete the update.</div>
+                                            <div th:text="${notification.timeAgo}" class="text-muted small mt-1">30m ago</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="dropdown-menu-footer">
+                                <a href="#" class="text-muted">Show all notifications</a>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- Profile Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+                            <i class="align-middle" data-feather="settings"></i>
+                        </a>
+
+                        <a  style="color:whitesmoke;" class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+                            <!--              <img th:src="@{${user.}}" class="avatar img-fluid rounded me-1" alt="Charles Hall" />-->
+                            <span style="color:whitesmoke; " th:text="${user.fname} + ' ' + ${user.lname}" class="">Charles Hall</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" th:href="@{/pages-profile}" href="pages-profile.html">
+                                <i class="align-middle me-1" data-feather="user"></i> Profile
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="align-middle me-1" data-feather="pie-chart"></i> Analytics
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="index.html">
+                                <i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="align-middle me-1" data-feather="help-circle"></i> Help Center
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <form th:action="@{/logout}" method="post">
+                                <!--                <button type="submit" class="btn btn-danger">Log out</button>-->
+                                <a class="dropdown-item" href="/logout">Log out</a>
+                            </form>
+                            <!--              <a class="dropdown-item" href="#">Log out</a>-->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+
+
+        <main class="content">
+
+            <div class="mb-3 d-block ">
+                <h2 class="  text-white ms-2" th:text="'Hello, ' + ${user.fname} +'.'"></h2>
+            </div>
+            <div class="container-fluid p-0  d-flex justify-content-center align-items-center">
+
+
+            <!-- Profile Details Card -->
+
+
+                <div class="col-md-8 col-xl-9 ">
+                    <div class="card backgroundColor">
+                        <div class="card-header backgroundColor">
+                            <h3 class="whitecolortext">Create Player Profile</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Form inside card body -->
+                            <form th:action="@{/player/profile/create}" method="post" th:object="${player}" class="whitecolortext needs-validation" novalidate>
+                                <!-- Availability dropdown -->
+                                <div class="form-group">
+                                    <label for="availability">Availability</label>
+                                    <select id="availability" class="form-control whitecolortext backgroundColor custom-input" th:field="*{availability}" required>
+                                        <option value=""  selected>Select Availability</option>
+                                        <option value="Weekend Evenings">Weekend Evenings</option>
+                                        <option value="Weekend Mornings">Weekend Mornings</option>
+                                        <option value="Weekday Mornings">Weekday Mornings</option>
+                                        <option value="Weekday Afternoons">Weekday Afternoons</option>
+                                        <option value="Weekday Evenings">Weekday Evenings</option>
+                                        <option value="flexible">Flexible</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select an availability.</div>
+                                </div>
+
+                                <!-- Position dropdown -->
+                                <div class="form-group">
+                                    <label for="position">Position</label>
+                                    <select id="position" class="form-control whitecolortext backgroundColor custom-input" th:field="*{position}" required>
+                                        <option value=""  selected>Select Position</option>
+                                        <option value="goalkeeper">Goalkeeper</option>
+                                        <option value="defender">Defender</option>
+                                        <option value="midfielder">Midfielder</option>
+                                        <option value="forward">Forward</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select a position.</div>
+                                </div>
+
+                                <!-- Skill Level dropdown -->
+                                <div class="form-group">
+                                    <label for="skillLevel">Skill Level</label>
+                                    <select id="skillLevel" class="form-control whitecolortext backgroundColor custom-input" th:field="*{skillLevel}" required>
+                                        <option value=""  selected>Select Skill Level</option>
+                                        <option value="beginner">Beginner</option>
+                                        <option value="intermediate">Intermediate</option>
+                                        <option value="advanced">Advanced</option>
+                                        <option value="professional">Professional</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select a skill level.</div>
+                                </div>
+
+                                <!-- Player Bio textarea -->
+                                <div class="form-group">
+                                    <label for="playerBio">Player Bio</label>
+                                    <textarea id="playerBio" class="form-control whitecolortext backgroundColor custom-input" th:field="*{playerBio}" required></textarea>
+                                    <div class="invalid-feedback">Please provide a player bio.</div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Create Player</button>
+                            </form>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-
-    <form th:action="@{/player/profile/create}" method="post" th:object="${player}" class="needs-validation" novalidate>
-        <div class="form-group">
-            <label for="availability">Availability</label>
-            <input type="text" id="availability" class="form-control" th:field="*{availability}" required>
-            <div class="invalid-feedback">Please enter availability.</div>
-        </div>
-
-        <div class="form-group">
-            <label for="position">Position</label>
-            <input type="text" id="position" class="form-control" th:field="*{position}" required>
-            <div class="invalid-feedback">Please enter position.</div>
-        </div>
-
-        <div class="form-group">
-            <label for="skillLevel">Skill Level</label>
-            <input type="text" id="skillLevel" class="form-control" th:field="*{skillLevel}" required>
-            <div class="invalid-feedback">Please enter skill level.</div>
-        </div>
-
-        <div class="form-group">
-            <label for="playerBio">Player Bio</label>
-            <textarea id="playerBio" class="form-control" th:field="*{playerBio}"></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Create Player</button>
-    </form>
 </div>
 </body>
+<script th:src="@{/js/app.js}"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            var forms = document.getElementsByClassName('needs-validation');
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+</script>
+
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Create Player</title>-->
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--    <h1>Create Player</h1>-->
+<!--    -->
+
+<!--    <form th:action="@{/player/profile/create}" method="post" th:object="${player}" class="needs-validation" novalidate>-->
+<!--        <div class="form-group">-->
+<!--            <label for="availability">Availability</label>-->
+<!--            <input type="text" id="availability" class="form-control" th:field="*{availability}" required>-->
+<!--            <div class="invalid-feedback">Please enter availability.</div>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="position">Position</label>-->
+<!--            <input type="text" id="position" class="form-control" th:field="*{position}" required>-->
+<!--            <div class="invalid-feedback">Please enter position.</div>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="skillLevel">Skill Level</label>-->
+<!--            <input type="text" id="skillLevel" class="form-control" th:field="*{skillLevel}" required>-->
+<!--            <div class="invalid-feedback">Please enter skill level.</div>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="playerBio">Player Bio</label>-->
+<!--            <textarea id="playerBio" class="form-control" th:field="*{playerBio}"></textarea>-->
+<!--        </div>-->
+
+<!--        <button type="submit" class="btn btn-primary">Create Player</button>-->
+<!--    </form>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->

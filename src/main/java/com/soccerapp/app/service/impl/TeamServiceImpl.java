@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,8 +55,36 @@ public class TeamServiceImpl implements TeamService {
     }
 
     public Team getTeamById(Long teamId) {
-        return teamRepository.findById(teamId).orElseThrow(() -> new RuntimeException("Team not found"));
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("Team not found"));
+
+        // Custom sorting based on position priority
+        List<Player> sortedPlayers = team.getPlayers()
+                .stream()
+                .sorted(Comparator.comparingInt(player -> getPositionPriority(player.getPosition())))
+                .collect(Collectors.toList());
+
+        team.setPlayers(sortedPlayers); // Assuming your Team class has a setter for players
+        return team;
     }
+
+    // Method to assign priority to positions
+    private int getPositionPriority(String position) {
+        switch (position.toLowerCase()) {
+            case "goalkeeper":
+                return 1;
+            case "defender":
+                return 2;
+            case "midfielder":
+                return 3;
+            case "attacker":
+            case "forward":
+                return 4;
+            default:
+                return 5; // Lowest priority for unknown positions
+        }
+    }
+
 
     public TeamDto findByTeamId(long id){
         Team team = teamRepository.findByTeamId(id).orElseThrow(() -> new RuntimeException("Team not found"));
@@ -71,6 +100,27 @@ public class TeamServiceImpl implements TeamService {
                 .map(this::mapToDto)  // Call a helper method to convert each Team to TeamDto
                 .collect(Collectors.toList());
     }
+
+    public List<TeamDto> getTeamsByLocation(String location) {
+        List<Team> teams = teamRepository.findByTeamLocationContainingIgnoreCase(location);
+
+        // Manual mapping of Team to TeamDto
+        List<TeamDto> teamDtos = new ArrayList<>();
+        for (Team team : teams) {
+            TeamDto dto = new TeamDto();
+            dto.setTeamId(team.getTeamId());
+            dto.setTeamName(team.getTeamName());
+            dto.setTeamLocation(team.getTeamLocation());
+            dto.setTeamDesc(team.getTeamDesc());
+            dto.setOwnerId(team.getUser().getId());
+            dto.setTeamLogo(team.getTeamLogo());
+            // Add any other fields you want to include
+            teamDtos.add(dto);
+        }
+        return teamDtos;
+    }
+
+
 
 
 

@@ -36,7 +36,7 @@ public class AuthController {
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("user", new UserDto());
-        return "index";
+        return "home";
     }
 
     @GetMapping("/register")

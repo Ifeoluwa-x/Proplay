@@ -51,6 +51,20 @@ public class PlayerServiceImpl implements PlayerService {
         return mapToDto(savedPlayer); // Returns DTO with populated ID
     }
 
+    // Update user information
+    public void updatePlayer(Long id, PlayerDto playerDto) {
+        Player player = playerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Player not found with ID: " + id));
+
+        // Update fields
+        player.setAvailability(playerDto.getAvailability());
+        player.setPlayerBio(playerDto.getPlayerBio());
+        player.setPosition(playerDto.getPosition());
+        player.setSkillLevel(playerDto.getSkillLevel());
+
+        playerRepository.save(player);
+    }
+
     public List<PlayerDto> findAllPlayers() {
         List<Player> players = playerRepository.findAll();
         return players.stream().map(this::mapToDto).collect(Collectors.toList());
@@ -84,11 +98,13 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private Player mapToPlayer(PlayerDto playerDto) {
+        if (playerDto.getUser() == null) {
+            System.out.println("User is null in PlayerDto");
+            throw new RuntimeException("User not found in PlayerDto");
+        }
+
         User user = userRepository.findById(playerDto.getUser().getId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
-        Team team = teamRepository.findById(playerDto.getTeam().getTeamId())
-                .orElseThrow(() -> new RuntimeException("Team not found"));
 
         return Player.builder()
                 .id(playerDto.getPlayerId())
@@ -97,7 +113,7 @@ public class PlayerServiceImpl implements PlayerService {
                 .availability(playerDto.getAvailability())
                 .skillLevel(playerDto.getSkillLevel())
                 .user(user)
-                .team(team)
+                .team(null)
                 .build();
     }
 

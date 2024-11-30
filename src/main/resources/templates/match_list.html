@@ -1,0 +1,142 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>All Matches</title>-->
+<!--  <style>-->
+<!--    /* Add some basic styling */-->
+<!--    body {-->
+<!--      font-family: Arial, sans-serif;-->
+<!--    }-->
+<!--    .matches-list {-->
+<!--      margin-top: 20px;-->
+<!--    }-->
+<!--    .match-item {-->
+<!--      margin-bottom: 10px;-->
+<!--      padding: 10px;-->
+<!--      border: 1px solid #ccc;-->
+<!--      border-radius: 5px;-->
+<!--    }-->
+<!--    .search-form {-->
+<!--      margin-bottom: 20px;-->
+<!--    }-->
+<!--    button {-->
+<!--      background-color: #4CAF50;-->
+<!--      color: white;-->
+<!--      padding: 10px 20px;-->
+<!--      border: none;-->
+<!--      cursor: pointer;-->
+<!--      border-radius: 5px;-->
+<!--    }-->
+<!--    button:hover {-->
+<!--      background-color: #45a049;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>Matches List</h1>-->
+
+<!--&lt;!&ndash; Search Form &ndash;&gt;-->
+<!--<form th:action="@{/matches}" method="get" class="search-form">-->
+<!--  <input type="text" name="location" placeholder="Search by location" th:value="${location}" />-->
+<!--  <button type="submit">Search</button>-->
+<!--</form>-->
+
+<!--<div class="matches-list">-->
+<!--  <div th:each="match : ${matches}">-->
+<!--    <div class="match-item">-->
+<!--      <h3 th:text="${match.formattedDate}">Match Date</h3>-->
+<!--      <p th:text="${match.location}">Location</p>-->
+<!--      <p th:text="${match.matchMode}">Match Mode</p>-->
+<!--      <p th:text="${match.Type}">Match Type</p>-->
+
+<!--      &lt;!&ndash; Join Button &ndash;&gt;-->
+<!--      <form th:action="@{/match/join/{matchId}/{playerId}(matchId=${match.matchId}, playerId=${player.id})}" method="post">-->
+<!--        <button type="submit">Join</button>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <p th:text="${player.id}">Player iD</p>-->
+
+<!--  &lt;!&ndash; No matches message &ndash;&gt;-->
+<!--  <div th:if="${#lists.isEmpty(matches)}">-->
+<!--    <p>No matches found.</p>-->
+<!--  </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Match List</title>
+  <!-- Bootstrap CSS (You can link to a CDN or use a local version) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .disabled-button {
+      background-color: gray !important;
+      cursor: not-allowed !important;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container my-5">
+  <!-- Display error or success message -->
+  <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+    <p th:text="${errorMessage}"></p>
+  </div>
+  <div th:if="${successMessage}" class="alert alert-success" role="alert">
+    <p th:text="${successMessage}"></p>
+  </div>
+
+  <div class="row">
+    <div th:each="match : ${matches}" class="col-12 mb-4">
+      <div class="card" style="width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
+        <div class="card-body">
+          <p th:text="'Match By ' + ${player.user.fname} + ' ' + ${player.user.lname}"></p>
+          <p th:text="${match.formattedDate}">Match Date</p>
+          <p th:text="${match.location}">Location</p>
+          <p th:text="'Available Spots: ' + ${match.availableSpots}"></p>
+
+          <form th:action="@{/match/join/{matchId}/{playerId}(matchId=${match.matchId}, playerId=${player.id})}" method="post">
+            <button type="submit" th:disabled="${match.joinDisabled}"
+                    style="padding: 12px 30px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%;"
+                    th:classappend="${match.joinDisabled} ? 'disabled-button' : ''">
+              Join
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div th:if="${#lists.isEmpty(matches)}" class="col-12">
+      <p>No matches found.</p>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- Bootstrap JS (Optional, for interactivity like modals or dropdowns) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+

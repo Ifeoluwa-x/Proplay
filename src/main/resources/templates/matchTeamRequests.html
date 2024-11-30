@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+    <meta name="author" content="AdminKit">
+    <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" th:href="@{/img/icons/icon-48x48.png}" />
+
+    <link rel="canonical" th:href="@{/pages-profile}" />
+
+    <title th:text="${pageTitle}">Profile | AdminKit Demo</title>
+
+    <link th:href="@{/css/app.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<div class="wrapper">
+    <!--   Sidebar Nav Bar -->
+    <nav id="sidebar" class="sidebar js-sidebar">
+        <div class="sidebar-content js-simplebar">
+            <div class="logo-container ">
+                <div class="logo-text ">
+                    <span class="pro">Pro</span><span class="play">Play</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li class="sidebar-header">Pages</li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/profile}">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/match/join/friendly/list}">
+                        <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Friendly Match</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/player/view/teams}">
+                        <i class="align-middle" data-feather="book"></i> <span class="align-middle">View Teams</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/team/management}">
+                        <i class="align-middle" data-feather="book"></i> <span class="align-middle">Team Management</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/subscription-history}">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Suscription</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-header">Tools & Components</li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/competition-hub}">
+                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Competition Hub</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" th:href="@{/competition-hub}">
+                        <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">ProPlay Cup</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-cta">
+                <div class="sidebar-cta-content">
+                    <strong class="d-inline-block mb-2">Upgrade to Pro</strong>
+                    <div class="mb-3 text-sm">
+                        Are you looking for more components? Check out our premium version.
+                    </div>
+                    <div class="d-grid">
+                        <a th:href="@{/subscription/plans}" class="btn btn-primary">Upgrade to Pro</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+
+
+    <!-- Main Content -->
+    <div class="main">
+        <!-- header Nav bar-->
+        <nav class="navbar navbar-expand navbar-light navbar-bg">
+            <a class="sidebar-toggle js-sidebar-toggle">
+                <i class="hamburger align-self-center"></i>
+            </a>
+
+            <div class="navbar-collapse collapse">
+                <ul class="navbar-nav navbar-align">
+                    <!-- Notifications Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+                            <div class="position-relative">
+                                <i class="align-middle" data-feather="bell"></i>
+                                <span class="indicator" th:text="${notificationsCount}">4</span>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+                            <div class="dropdown-menu-header" th:text="${notificationsCount} + ' New Notifications'">4 New Notifications</div>
+                            <div class="list-group">
+                                <a th:each="notification : ${notifications}" href="#" class="list-group-item">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-2">
+                                            <i th:classappend="' ' + ${notification.iconClass}" class="text-danger" data-feather="alert-circle"></i>
+                                        </div>
+                                        <div class="col-10">
+                                            <div th:text="${notification.message}" class="text-dark">Update completed</div>
+                                            <div th:text="${notification.details}" class="text-muted small mt-1">Restart server 12 to complete the update.</div>
+                                            <div th:text="${notification.timeAgo}" class="text-muted small mt-1">30m ago</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="dropdown-menu-footer">
+                                <a href="#" class="text-muted">Show all notifications</a>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- Profile Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+                            <i class="align-middle" data-feather="settings"></i>
+                        </a>
+
+                        <a  style="color:whitesmoke;" class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+                            <!--              <img th:src="@{${user.}}" class="avatar img-fluid rounded me-1" alt="Charles Hall" />-->
+                            <span style="color:whitesmoke; " th:text="${user.fname} + ' ' + ${user.lname}" class="">Charles Hall</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" th:href="@{/pages-profile}" href="pages-profile.html">
+                                <i class="align-middle me-1" data-feather="user"></i> Profile
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="align-middle me-1" data-feather="pie-chart"></i> Analytics
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="index.html">
+                                <i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="align-middle me-1" data-feather="help-circle"></i> Help Center
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <form th:action="@{/logout}" method="post">
+                                <!--                <button type="submit" class="btn btn-danger">Log out</button>-->
+                                <a class="dropdown-item" href="/logout">Log out</a>
+                            </form>
+                            <!--              <a class="dropdown-item" href="#">Log out</a>-->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+        <main class="content">
+
+            <div class="mb-3 d-block ">
+                <h2 class="  text-white ms-2" th:text="'Hello, ' + ${user.fname} +'.'"></h2>
+            </div>
+            <div class="container-fluid p-0  d-flex justify-content-center align-items-center">
+                <div class="row">
+                    <div class="col-12 col-lg-6">
+                        <div class="card backgroundColor cardBorder">
+                            <!-- Display success message at the top -->
+                            <div th:if="${successMessage != null}" class="alert alert-success d-block" role="alert" style="width: 100%">
+                                <p th:text="${successMessage}"></p>
+                            </div>
+                            <div class="card-header backgroundColor">
+                                <h3 class="whitecolortext">Request sent to Your team: </h3>
+                            </div>
+                            <div class="container-fluid p-0">
+                                <div class="d-flex justify-content-center align-items-center backgroundColor">
+                                    <div th:if="${incomingRequests != null or incomingRequests.size() > 0}" class="row">
+                                        <div class="row g-4">
+                                            <div th:each="matchTeamReq : ${incomingRequests}" class="col-12">
+                                                <div class="d-flex align-items-center border rounded p-3 flex-column">
+
+                                                    <!-- Team Information -->
+                                                    <div class="flex-grow-1 mb-3">
+                                                        <p class="mb-1 whitecolortext">
+                                                            <strong>Request:</strong>
+                                                            <span th:text="${matchTeamReq.customMessage}">Message</span>
+                                                        </p>
+                                                    </div>
+
+                                                    <!-- Action Buttons -->
+                                                    <div class="d-flex justify-content-center gap-3">
+                                                        <!-- Accept Button Form -->
+                                                        <form th:action="@{/team/match/request/accept/{teamId}/{matchId}/{matchReqId}
+                                (matchId=${matchTeamReq.match.matchId},matchReqId=${matchTeamReq.id},teamId=${teamId})}" method="post">
+                                                            <button type="submit" class="btn btn-success btn-lg">Accept</button>
+                                                        </form>
+
+                                                        <!-- Decline Button Form -->
+                                                        <form th:action="@{/declineRequest/{matchTeamReqId}
+                                (matchTeamReqId=${matchTeamReq.id})}" method="post">
+                                                            <button type="submit" class="btn btn-danger btn-lg">Decline</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- Show message if no teams are available -->
+                                <div th:if="${incomingRequests == null or incomingRequests.size() == 0}">
+                                    <div class="backgroundColor">
+                                        <h4 class="whitecolortext" style="padding-left:20px; "> No Friendly Request at this time. Check back Later</h4>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="card backgroundColor cardBorder">
+                            <div class="card-header backgroundColor">
+                                <h3 class="whitecolortext">Request Sent to other Teams:</h3>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="container-fluid p-0">
+                                    <div class="d-flex justify-content-center align-items-center backgroundColor">
+                                        <!-- Match Requests -->
+                                        <div th:if="${homeTeamRequests != null and homeTeamRequests.size() > 0}">
+                                            <h3 class="mb-4">Pending and Declined Match Requests</h3>
+                                            <div class="row g-3">
+                                                <div th:each="request : ${homeTeamRequests}" class="col-12">
+                                                    <div class="card border rounded shadow-sm p-3">
+                                                        <div class="card-body">
+                                                            <!-- Match Details -->
+                                                            <h5 class="card-title mb-3">
+                                                                <span th:text="${request.homeTeam.teamName}">Home Team</span>
+                                                                vs
+                                                                <span th:text="${request.awayTeam.teamName}">Away Team</span>
+                                                            </h5>
+
+                                                            <p class="card-text mb-1">
+                                                                <strong>Time:</strong>
+                                                                <span th:text="${request.formattedDate}">Match Time</span>
+                                                            </p>
+
+                                                            <p class="card-text mb-1">
+                                                                <strong>Location:</strong>
+                                                                <span th:text="${request.match.location}">Match Location</span>
+                                                            </p>
+
+                                                            <p class="card-text">
+                                                                <strong>Status:</strong>
+                                                                <span th:text="${request.decision}">Pending/Declined</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- No Requests -->
+                                        <div th:if="${homeTeamRequests == null or homeTeamRequests.size() == 0}" class="text-center">
+                                            <p class="whitecolortext">No match requests available.</p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="card backgroundColor cardBorder">
+                            <div class="card-header backgroundColor">
+                                <h3 class="whitecolortext">Upcoming Matches:</h3>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="container-fluid p-0">
+                                    <div class="d-flex justify-content-center align-items-center backgroundColor">
+                                        <!-- Match Requests -->
+                                        <div th:if="${acceptedRequests != null and acceptedRequests.size() > 0}">
+                                                <h3 class="mb-4 whitecolortext">View your Upcoming matches with other Teams here.</h3>
+                                            <div class="row g-3">
+                                                <div th:each="request : ${acceptedRequests}" class="col-12">
+                                                    <div class="card border rounded shadow-sm p-3">
+                                                        <div class="card-body">
+                                                            <!-- Match Details -->
+                                                            <h5 class="card-title mb-3">
+                                                                <span th:text="${request.homeTeam.teamName}">Home Team</span>
+                                                                vs
+                                                                <span th:text="${request.awayTeam.teamName}">Away Team</span>
+                                                            </h5>
+
+                                                            <p class="card-text mb-1">
+                                                                <strong>Time:</strong>
+                                                                <span th:text="${request.formattedDate}">Match Time</span>
+                                                            </p>
+
+                                                            <p class="card-text mb-1">
+                                                                <strong>Location:</strong>
+                                                                <span th:text="${request.match.location}">Match Location</span>
+                                                            </p>
+
+                                                            <p class="card-text">
+                                                                <strong>Status:</strong>
+                                                                <span th:text="${request.decision}">Pending/Declined</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- No Requests -->
+                                        <div th:if="${acceptedRequests == null or acceptedRequests.size() == 0}" class="text-center">
+                                            <p class="whitecolortext">No match requests available.</p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+<script th:src="@{/js/app.js}"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Pending Away Team Matches</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h2>Pending Away Team Matches</h2>-->
+
+<!--<table class="table table-striped">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>Match ID</th>-->
+<!--        <th>Home Team</th>-->
+<!--        <th>Away Team</th>-->
+<!--        <th>Match Date</th>-->
+<!--        <th>Decision</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="matchTeamReq : ${incomingRequests}">-->
+<!--        <td th:text="${matchTeamReq.id}"></td>-->
+<!--        <td th:text="${matchTeamReq.homeTeam.teamName}"></td>-->
+<!--        <td th:text="${matchTeamReq.awayTeam.teamName}"></td>-->
+<!--        <td th:text="${matchTeamReq.customMessage}"></td>-->
+<!--        <td th:text="${matchTeamReq.decision}"></td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+
+<!--</body>-->
+<!--</html>-->

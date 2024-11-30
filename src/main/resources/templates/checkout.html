@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Checkout</title>
+</head>
+<body>
+
+<h1>Checkout</h1>
+<p>Product: <span th:text="${productName}"></span></p>
+<p>Amount: <span th:text="${amount}"></span></p>
+
+<!-- Stripe Payment Form -->
+<form action='/charge' method='POST' id='checkout-form'>
+  <input type='hidden' th:value='${amount}' name='amount' />
+  <label>Price:<span th:text='${amount/100}' /></label>
+  <!-- NOTE: data-key/data-amount/data-currency will be rendered by Thymeleaf -->
+  <script
+          src='https://checkout.stripe.com/checkout.js'
+          class='stripe-button'
+          th:attr='data-key=${stripePublicKey},
+         data-amount=${amount},
+         data-currency=${currency}'
+          data-name='Baeldung'
+          data-description='Spring course checkout'
+          data-image
+                  ='https://www.baeldung.com/wp-content/themes/baeldung/favicon/android-chrome-192x192.png'
+          data-locale='auto'
+          data-zip-code='false'>
+  </script>
+</form>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  var stripe = "pk_test_51QHubjDi7J3qzsSUCd5A7movkvDqw8JJ6wpqc3bKGO8t8lw3PWmgZTIjQXxHoEvPVeE5DWRuFl5EgaE9BsOaM1FW00njkEKMCs"  // Replace with your public key
+  var elements = stripe.elements();
+  var card = elements.create('card');
+  card.mount('#card-element');
+
+  var form = document.getElementById('payment-form');
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    stripe.createPaymentMethod('card', card).then(function(result) {
+      if (result.error) {
+        var errorElement = document.getElementById('card-errors');
+        errorElement.textContent = result.error.message;
+      } else {
+        // Handle the result (e.g., send it to the server)
+        var paymentMethod = result.paymentMethod;
+        console.log(paymentMethod);
+        // You can send this payment method to your server to create a PaymentIntent.
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

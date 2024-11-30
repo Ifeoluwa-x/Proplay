@@ -23,13 +23,13 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .form-control {
+        .form-control, .form-select {
             background-color: #303030;
             border: none;
             color: white;
         }
 
-        .form-control:focus {
+        .form-control:focus, .form-select:focus {
             background-color: #303030;
             color: white;
             box-shadow: none;
@@ -56,7 +56,6 @@
             color: white;
         }
 
-        /* ProPlay Logo Styling */
         .logo-container {
             text-align: center;
             margin-bottom: 20px;
@@ -88,7 +87,6 @@
             <span class="pro">Pro</span><span class="play">Play</span>
         </div>
     </div>
-
 
     <div th:if="${param.error}" class="alert alert-danger">
         Invalid username and password.
@@ -126,8 +124,7 @@
         <!-- Password Field -->
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" th:field="*{password}" class="form-control"
-                   required>
+            <input type="password" id="password" name="password" th:field="*{password}" class="form-control" required>
             <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></p>
         </div>
 
@@ -140,17 +137,32 @@
 
         <!-- Location Field -->
         <div class="form-group">
-            <label for="location">Location:</label>
-            <input type="text" id="location" name="location" th:field="*{location}" class="form-control" required>
-            <p th:if="${#fields.hasErrors('location')}" class="text-danger" th:errors="*{location}"></p>
+            <label for="location" style="color: white; display: block; margin-bottom: 5px;">Location:</label>
+            <select id="location" name="location" th:field="*{location}" required
+                    style="width: 100%; padding: 10px; background-color: #303030; border: none; color: white; border-radius: 5px; font-size: 16px; box-shadow: none; outline: none;">
+                <option value="">Select Location</option>
+                <option value="Burnaby">Burnaby</option>
+                <option value="Richmond">Richmond</option>
+                <option value="Surrey">Surrey</option>
+                <option value="New westminster">New westminster</option>
+                <option value="Vancouver">Vancouver</option>
+            </select>
+            <p th:if="${#fields.hasErrors('location')}" th:errors="*{location}" style="color: #ff6b6b; margin-top: 5px;"></p>
         </div>
 
         <!-- Sex Field -->
         <div class="form-group">
-            <label for="sex">Sex:</label>
-            <input type="text" id="sex" name="sex" th:field="*{sex}" class="form-control" required>
-            <p th:if="${#fields.hasErrors('sex')}" class="text-danger" th:errors="*{sex}"></p>
+            <label for="sex" style="color: white; display: block; margin-bottom: 5px;">Sex:</label>
+            <select id="sex" name="sex" th:field="*{sex}" required
+                    style="width: 100%; padding: 10px; background-color: #303030; border: none; color: white; border-radius: 5px; font-size: 16px; box-shadow: none; outline: none;">
+                <option value="">Select Sex</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <p th:if="${#fields.hasErrors('sex')}" th:errors="*{sex}" style="color: #ff6b6b; margin-top: 5px;"></p>
         </div>
+
 
         <!-- Submit Button -->
         <button type="submit" class="btn btn-primary">Create User</button>

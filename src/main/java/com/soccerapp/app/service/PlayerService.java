@@ -14,6 +14,8 @@ public interface PlayerService {
 
     PlayerDto createPlayerProfile(PlayerDto playerDto);
 
+    public void updatePlayer(Long id, PlayerDto playerDto);
+
     List<PlayerDto> findAllPlayers();
 
     List<PlayerDto> findPlayersNotInTeam(Long teamId);

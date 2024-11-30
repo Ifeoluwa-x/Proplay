@@ -22,6 +22,15 @@ footer{
     color: white !important; /* Use !important to ensure it's applied */
 }
 
+.backgroundColor{
+  background-color: #212E3C !important;
+}
+
+/*div{*/
+/*  border: 1px solid red;*/
+/*}*/
+
+
 
 
 
@@ -58,29 +67,27 @@ footer{
     border: 2px solid #4b69b0;
   }
 
-  /* .red{
-    border: 1px solid red;
-  } */
-
-
-
-  /* div{
+  .red{
     border: 1px solid red;
   }
 
-  .pxheight100{
-    min-height: 100px;
-  }
+
+
+  /*div{*/
+  /*  border: 1px solid red;*/
+  /*}*/
+
+
 
   /* Custom styles for the search bar */
-  body{
-    background-color: #8f4df8;
-  }
+  /*body{*/
+  /*  background-color: #8f4df8;*/
+  /*}*/
 
  
-/* .card{
-    border: 1px solid red;
-} */
+/*.red{*/
+/*    border: 1px solid red;*/
+/*}*/
 
 
 
@@ -176,3 +183,57 @@ img {
   margin-top: 35px;
   text-align: center;
 }
+.profile_input{
+  background-color: #0e616e !important;
+}
+
+.sidebar-toggle .hamburger {
+  color: #ff5733; /* Replace with your desired color */
+}
+
+.whitecolortext{
+  color: whitesmoke;
+}
+.modal-content {
+  background-color: white;
+  max-width: 500px; /* Limit the modal width */
+  margin: 0 auto; /* Center the modal */
+}
+
+.cardBorder{
+  border: 1px solid white;
+  padding: 7px;
+}
+
+.custom-input:focus {
+  color: whitesmoke; /* Change to your desired color */
+  border-color: #007bff; /* Optional: Change border color */
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add subtle shadow effect */
+}
+
+.custom-input:focus {
+  color: whitesmoke; /* Change to your desired color */
+  border-color: #007bff; /* Optional: Change border color */
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add subtle shadow effect */
+}
+
+.custom-inputs:focus {
+  color: whitesmoke; /* Change to your desired color */
+  background-color:#212E3C ;
+  border-color: #007bff; /* Optional: Change border color */
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add subtle shadow effect */
+}
+
+
+
+.custom-inputs {
+  color: whitesmoke; /* Change to your desired color */
+  background-color:#212E3C ;
+}
+
+
+
+
