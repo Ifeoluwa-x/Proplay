@@ -1,0 +1,213 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+@import url("https://fonts.googleapis.com/css?family=Roboto:700|Poppins:500,400,700");
+@import url("https://px.animaapp.com/65eca13f503101d52f694bb6.65eca140503101d52f694bb9.Cb9y7Fa.hcp.png");
+
+@font-face {
+  font-family: "Helvetica Neue-Medium";
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/HelveticaNeueMed.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Helvetica Neue-Regular";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/Helvetica_33244fbeea10f093ae87de7a994c3697.ttf") format("truetype");
+}
+
+
+.screen a {
+  display: contents;
+  text-decoration: none;
+}
+
+.container-center-horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  pointer-events: none;
+  width: 100%;
+}
+
+.container-center-horizontal > * {
+  flex-shrink: 0;
+  pointer-events: auto;
+}
+
+.valign-text-middle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.title {
+  letter-spacing: 0;
+  line-height: normal;
+  min-height: 38px;
+  min-width: 50px;
+  white-space: nowrap;
+}
+
+.frame-1000005705-3 {
+  display: flex;
+  flex: 0 0 auto;
+  position: relative;
+  width: 49.17px;
+}
+
+.vuesaxlinearhome {
+  height: 16.67px;
+  position: relative;
+  width: 16.67px;
+}
+
+.frame-1000005705 {
+  align-items: center;
+  display: flex;
+  gap: 8.33px;
+  position: relative;
+  top: 8px;
+  width: 49px;
+}
+
+.vuesaxlinearcalendar-2 {
+  height: 16.67px;
+  position: relative;
+  width: 16.67px;
+}
+
+.frame-1000005705-1 {
+  display: flex;
+  position: relative;
+  top: 7px;
+  width: 49px;
+}
+
+.x10 {
+  height: 16.67px;
+  position: relative;
+  width: 16.67px;
+}
+
+.vuesaxlinearnote {
+  height: 16.67px;
+  position: relative;
+  width: 16.67px;
+}
+
+.vuesaxlineartimer {
+  height: 16.67px;
+  position: relative;
+  width: 16.67px;
+}
+
+.frame-1000005705-4 {
+  display: inline-flex;
+  position: relative;
+  top: 8px;
+}
+
+.vuesaxlineargame {
+  height: 16.67px;
+  position: relative;
+  width: 16.67px;
+}
+
+.venues {
+  letter-spacing: 0;
+  line-height: 11.7px;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.frame-1000005705-2 {
+  display: flex;
+  left: 0;
+  position: absolute;
+  top: 8px;
+  width: 49px;
+}
+
+.vuesaxlinearcup {
+  height: 16.67px;
+  position: relative;
+  width: 16.67px;
+}
+
+.line-rounded-chevron-right {
+  height: 10px;
+  left: 193px;
+  position: absolute;
+  top: 11px;
+  width: 10px;
+}
+
+.vuesaxlinearelement-plus {
+  height: 16.67px;
+  position: relative;
+  width: 16.67px;
+}
+
+.vuesaxlinearnotification {
+  height: 16.67px;
+  position: relative;
+  width: 16.67px;
+}
+
+.frame-1000005705-5 {
+  display: flex;
+  margin-top: 0.83px;
+  position: relative;
+  width: 49px;
+}
+
+.vuesaxlinearcolor-swatch {
+  height: 16.67px;
+  position: relative;
+  width: 16.67px;
+}
+
+.line-rounded-chevron-right-1 {
+  height: 10px;
+  left: 47px;
+  position: absolute;
+  top: 10px;
+  width: 10px;
+}
+
+.input-content {
+  align-items: center;
+  background-color: var(--blue-dianne);
+  border-radius: 14.17px;
+  display: flex;
+  gap: 10px;
+  height: 28px;
+  justify-content: flex-end;
+  left: 0;
+  min-width: 58px;
+  padding: 1.7px 1.7px;
+  position: absolute;
+  top: 0;
+}
+
+.vector {
+  height: 12px;
+  margin-bottom: 0;
+  width: 12px;
+}
+
+.frame-1000005705-6 {
+  align-items: center;
+  gap: 8.33px;
+}
+
+.vuesaxlinearchart {
+  height: 16.67px;
+  position: relative;
+  width: 16.67px;
+}
